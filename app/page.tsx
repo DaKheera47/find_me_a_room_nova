@@ -1,49 +1,27 @@
 import { listOfRooms } from "@/content/listOfRooms";
-import Link from "next/link";
 
 import RoomSelector from "@/components/RoomSelector";
-import { buttonVariants } from "@/components/ui/button";
-import { siteConfig } from "@/config/site";
 
 export default function IndexPage() {
     return (
         <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
             <div className="flex max-w-[980px] flex-col items-start gap-2">
-                <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-                    Beautifully designed components{" "}
-                    <br className="hidden sm:inline" />
-                    built with Radix UI and Tailwind CSS.
+                <h1 className="text-3xl font-bold md:text-4xl">
+                    UCLan Room Availability Checker
+                    <br className="hidden sm:block" />
+                    <span className="from mt-2 w-fit bg-gradient-to-r from-red-500 to-blue-500 bg-clip-text text-xl font-extrabold text-transparent">
+                        Instantly find available rooms
+                    </span>
                 </h1>
-                <p className="max-w-[700px] text-lg text-muted-foreground">
-                    Accessible and customizable components that you can copy and
-                    paste into your apps. Free. Open Source. And Next.js 13
-                    Ready.
+
+                <p className="mt-4 max-w-2xl text-gray-700 dark:text-gray-300">
+                    Check the current availability of rooms across the
+                    University of Central Lancashire Preston campus. Ideal for
+                    finding a quick study space or meeting room.
                 </p>
             </div>
 
-            <div className="flex gap-4">
-                <Link
-                    href={siteConfig.links.docs}
-                    target="_blank"
-                    rel="noreferrer"
-                    className={buttonVariants()}
-                >
-                    Documentation
-                </Link>
-
-                <Link
-                    target="_blank"
-                    rel="noreferrer"
-                    href={siteConfig.links.github}
-                    className={buttonVariants({ variant: "outline" })}
-                >
-                    GitHub
-                </Link>
-            </div>
-
-            <div className="h-screen bg-gray-500">
-                <RoomSelector listOfRooms={listOfRooms} />
-            </div>
+            <RoomSelector listOfRooms={listOfRooms} />
         </section>
     );
 }
