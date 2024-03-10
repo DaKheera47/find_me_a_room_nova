@@ -7,7 +7,6 @@ export const listOfBuildings: BuildingInfo[] = [
     { buildingName: "Adelphi Building", buildingCode: "AB" },
     { buildingName: "Allen Building", buildingCode: "AL" },
     { buildingName: "Brook Building", buildingCode: "BB" },
-    { buildingName: "Chandler Building", buildingCode: "CB" },
     { buildingName: "Computing & Technology Building", buildingCode: "CM" },
     { buildingName: "Darwin Building", buildingCode: "DB" },
     { buildingName: "Edward Building", buildingCode: "EB" },
