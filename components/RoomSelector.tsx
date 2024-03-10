@@ -3,7 +3,6 @@
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import * as React from "react";
 
 import {
     Card,
@@ -22,6 +21,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import useRoomStore from "@/store/roomStore";
 
 type RoomDataFetcherProps = {
     listOfRooms: string[];
@@ -30,31 +30,28 @@ type RoomDataFetcherProps = {
 const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
     // State to hold the current selection and room data
     const [selection, setSelection] = useState("CM034");
-    const [data, setData] = useState("");
-    const [roomData, setRoomData] = useState({});
-    const [isLoading, setIsLoading] = useState(false);
-
-    // Function to handle selection changes
-    const onChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedRoom = event.target.value;
-        console.log(selectedRoom);
-        setSelection(selectedRoom);
-    };
+    const { data, isLoading, setData, setIsLoading } = useRoomStore();
 
     // Function to fetch room data
     const getRoomData = async (roomName: string) => {
         setIsLoading(true);
+
         try {
-            const response = await fetch("http://127.0.0.1:3000/scrape-room", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
+            const response = await fetch(
+                "http://127.0.0.1:3000/get-all-room-info",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        roomName: roomName,
+                    }),
                 },
-                body: JSON.stringify({
-                    roomName: roomName,
-                }),
-            });
+            );
+
             const data = await response.json();
+
             setData(data);
         } catch (error) {
             console.error("Failed to fetch room data:", error);
@@ -88,8 +85,8 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
 
     return (
         <>
-            <div className="flex gap-4">
-                <Card className="w-1/3">
+            <div className="flex w-full gap-4 max-md:flex-wrap">
+                <Card className="w-full md:w-1/3">
                     <CardHeader className="flex flex-row items-center justify-between">
                         <div>
                             <CardTitle>Is Room Available</CardTitle>
@@ -158,7 +155,7 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
                     </CardFooter>
                 </Card>
 
-                <Card className="w-2/3">
+                <Card className="w-full md:w-2/3">
                     <CardHeader>
                         <CardTitle>Room Data</CardTitle>
                         <CardDescription>
@@ -167,7 +164,7 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
                     </CardHeader>
 
                     <CardContent>
-                        <pre>{JSON.stringify(data, null, 2)}</pre>
+                        {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
                     </CardContent>
                 </Card>
             </div>
