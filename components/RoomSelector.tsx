@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { cn, dateStringToReadable } from "@/lib/utils";
 import useRoomStore from "@/store/roomStore";
+import { listOfBuildings } from "@/content/listOfBuildings";
 
 type RoomDataFetcherProps = {
     listOfRooms: string[];
@@ -31,6 +32,20 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
     // State to hold the current selection and room data
     const [selection, setSelection] = useState("CM034");
     const { data, isLoading, setData, setIsLoading } = useRoomStore();
+    const [selectedBuildingCode, setBuildingCode] = useState("");
+    const [selectedRoom, setSelectedRoom] = useState(" ");
+    const [listOfRoomsToShow, setListOfRoomsToShow] = useState([" "]);
+
+    const onBuildingChange = (buildingCode: string) => {
+        setBuildingCode(buildingCode);
+
+        // get all the rooms in the building
+        const out = listOfRooms.filter((room) => {
+            return room.startsWith(buildingCode);
+        });
+
+        setListOfRoomsToShow(out);
+    };
 
     // Function to fetch room data
     const getRoomData = async (roomName: string) => {
@@ -107,35 +122,82 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
                         onSubmit={(e) => {
                             e.preventDefault();
 
-                            getRoomData(selection);
+                            getRoomData(selectedRoom);
                         }}
                     >
                         <CardContent>
                             <div className="grid w-full items-center gap-4">
                                 <div className="flex flex-col space-y-1.5">
-                                    <Label htmlFor="room">Room</Label>
+                                    <div>
+                                        <Label htmlFor="building">
+                                            Building
+                                        </Label>
+                                        <Select
+                                            required
+                                            onValueChange={(value) =>
+                                                onBuildingChange(value)
+                                            }
+                                        >
+                                            <SelectTrigger id="building">
+                                                <SelectValue placeholder="Select the building in which your room is" />
+                                            </SelectTrigger>
 
-                                    <Select
-                                        required
-                                        onValueChange={(value) =>
-                                            setSelection(value)
-                                        }
-                                    >
-                                        <SelectTrigger id="room">
-                                            <SelectValue placeholder="Select your room" />
-                                        </SelectTrigger>
+                                            <SelectContent position="popper">
+                                                {listOfBuildings.map(
+                                                    (building) => (
+                                                        <SelectItem
+                                                            key={
+                                                                building.buildingCode
+                                                            }
+                                                            value={
+                                                                building.buildingCode
+                                                            }
+                                                            className="capitalize"
+                                                        >
+                                                            {
+                                                                building.buildingCode
+                                                            }{" "}
+                                                            -{" "}
+                                                            {
+                                                                building.buildingName
+                                                            }
+                                                        </SelectItem>
+                                                    ),
+                                                )}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
 
-                                        <SelectContent position="popper">
-                                            {listOfRooms.map((room) => (
-                                                <SelectItem
-                                                    key={room}
-                                                    value={room}
-                                                >
-                                                    {room}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
+                                    <div>
+                                        <Label htmlFor="room">Room</Label>
+                                        <Select
+                                            required
+                                            disabled={
+                                                selectedBuildingCode === ""
+                                            }
+                                            onValueChange={(value) =>
+                                                setSelectedRoom(value)
+                                            }
+                                        >
+                                            <SelectTrigger id="room">
+                                                <SelectValue placeholder="Select the room you're looking for" />
+                                            </SelectTrigger>
+
+                                            <SelectContent position="popper">
+                                                {listOfRoomsToShow.map(
+                                                    (room, idx) => (
+                                                        <SelectItem
+                                                            key={room + selectedBuildingCode}
+                                                            value={room}
+                                                            className="capitalize"
+                                                        >
+                                                            {room}
+                                                        </SelectItem>
+                                                    ),
+                                                )}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
                                 </div>
                             </div>
                         </CardContent>
@@ -152,7 +214,7 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
                             <div>
                                 <CardTitle>Room Summary</CardTitle>
                                 <CardDescription>
-                                    Summary for {selection}
+                                    Summary for {data.roomName}
                                 </CardDescription>
                             </div>
 
