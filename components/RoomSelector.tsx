@@ -53,7 +53,7 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
 
         try {
             const response = await fetch(
-                process.env.BACKEND_BASE_URL + "/get-all-room-info",
+                process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/get-all-room-info",
                 {
                     method: "POST",
                     headers: {
@@ -81,7 +81,7 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
 
         try {
             const response = await fetch(
-                process.env.BACKEND_BASE_URL + "/is-room-free",
+                process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/is-room-free",
                 {
                     method: "POST",
                     headers: {

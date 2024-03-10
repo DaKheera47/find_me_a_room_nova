@@ -31,7 +31,7 @@ type BuildingSelector = {
 const BuildingSelector = ({ listOfBuildings }: BuildingSelector) => {
     const [data, setData] = useState<RoomWithTimetable[] | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [buildingCode, setBuildingCode] = useState("CM");
+    const [buildingCode, setBuildingCode] = useState("");
     const [floor, setFloor] = useState("0");
     const [listOfFloors, setListOfFloors] = useState(["0"]);
 
@@ -62,7 +62,7 @@ const BuildingSelector = ({ listOfBuildings }: BuildingSelector) => {
 
         try {
             const response = await fetch(
-                process.env.BACKEND_BASE_URL +
+                process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
                     "/get-available-rooms-in-building",
                 {
                     method: "POST",
@@ -150,6 +150,7 @@ const BuildingSelector = ({ listOfBuildings }: BuildingSelector) => {
                                     <Label htmlFor="building">Floor</Label>
                                     <Select
                                         required
+                                        disabled={buildingCode === ""}
                                         onValueChange={(value) =>
                                             setFloor(value)
                                         }
