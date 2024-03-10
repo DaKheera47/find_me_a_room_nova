@@ -1,35 +1,44 @@
-"use client";
+import { Icons } from "@/components/icons";
+import Link from "next/link";
+import React from "react";
 
-import { listOfRooms } from "@/content/listOfRooms";
+type Props = {};
 
-import RoomSelector from "@/components/RoomSelector";
-import CalendarForTimetable from "@/components/CalendarForTimetable";
-import useRoomStore from "@/store/roomStore";
-
-export default function IndexPage() {
-    const { data } = useRoomStore();
+export default function Page({}: Props) {
+    const links = [
+        {
+            title: "Check room availability",
+            href: "/room-availability-checker",
+            description:
+                "Find if a specific room is available for use and view its timetable",
+        },
+        {
+            title: "Find a free room",
+            href: "/find-free-room",
+            description:
+                "Find an available room right now, using filters to find a room that suits your needs",
+        },
+    ];
 
     return (
-        <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
-            <div className="flex max-w-[980px] flex-col items-start gap-2">
-                <h1 className="text-3xl font-bold md:text-4xl">
-                    UCLan Room Availability Checker
-                    <br className="block" />
-                    <span className="from mt-2 w-fit bg-gradient-to-r from-red-500 to-blue-500 bg-clip-text text-xl font-extrabold text-transparent">
-                        Instantly find available rooms
-                    </span>
-                </h1>
+        <section className="container mt-8">
+            <div className="grid grid-cols-2 gap-2">
+                {links.map((link) => (
+                    <Link
+                        className="flex size-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none transition-all hover:shadow-md"
+                        href={link.href}
+                        key={link.href}
+                    >
+                        <div className="mb-2 text-lg font-medium capitalize">
+                            {link.title}
+                        </div>
 
-                <p className="mt-4 max-w-2xl text-gray-700 dark:text-gray-300">
-                    Check the current availability of rooms across the
-                    University of Central Lancashire Preston campus. Ideal for
-                    finding a quick study space or meeting room.
-                </p>
+                        <p className="text-sm leading-tight text-muted-foreground">
+                            {link.description}
+                        </p>
+                    </Link>
+                ))}
             </div>
-
-            <RoomSelector listOfRooms={listOfRooms} />
-
-            <CalendarForTimetable timetable={data?.timetable} />
         </section>
     );
 }

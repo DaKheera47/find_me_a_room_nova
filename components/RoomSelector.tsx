@@ -103,8 +103,14 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
                         />
                     </CardHeader>
 
-                    <CardContent>
-                        <form>
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+
+                            getRoomData(selection);
+                        }}
+                    >
+                        <CardContent>
                             <div className="grid w-full items-center gap-4">
                                 <div className="flex flex-col space-y-1.5">
                                     <Label htmlFor="room">Room</Label>
@@ -132,27 +138,12 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
                                     </Select>
                                 </div>
                             </div>
-                        </form>
-                    </CardContent>
+                        </CardContent>
 
-                    <CardFooter className="flex justify-between">
-                        <Button
-                            onClick={() => {
-                                getRoomData(selection);
-                            }}
-                            variant="outline"
-                        >
-                            Get All Data
-                        </Button>
-
-                        <Button
-                            onClick={() => {
-                                isRoomAvailable(selection);
-                            }}
-                        >
-                            Is Room Available
-                        </Button>
-                    </CardFooter>
+                        <CardFooter className="flex justify-end">
+                            <Button type="submit">Get Room Data</Button>
+                        </CardFooter>
+                    </form>
                 </Card>
 
                 {data && (
