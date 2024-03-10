@@ -12,28 +12,31 @@ import {
 
 import { listOfRooms } from "@/content/listOfRooms";
 import { useRouter } from "next/navigation";
+import { useCommandBarStore } from "@/store/commandBarStore";
+// import { listOfBuildings } from "@/content/listOfBuildings";
 
 export default function CommandSearch() {
-  const [open, setOpen] = React.useState(false);
+  const { open, setOpen, toggle } = useCommandBarStore();
   const router = useRouter();
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setOpen((open) => !open);
+
+        toggle();
       }
     };
 
     document.addEventListener("keydown", down);
 
     return () => document.removeEventListener("keydown", down);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // make a list of jsut the building names
-  //   const buildingNames = listOfBuildings.map(
-  //     (building) => building.buildingName,
-  //   );
+  // const buildingNames = listOfBuildings.map(
+  //   (building) => building.buildingName,
+  // );
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>

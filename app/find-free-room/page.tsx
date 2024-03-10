@@ -13,7 +13,7 @@ export default function IndexPage() {
         <h1 className="text-3xl font-bold md:text-4xl">
           UCLan Free Room Finder
         </h1>
-        <span className="w-fit bg-gradient-to-r from-red-500 to-blue-500 bg-clip-text  text-xl font-bold text-transparent">
+        <span className="w-fit bg-gradient-to-r from-red-500 to-blue-500 bg-clip-text text-xl font-bold text-transparent">
           Instantly find available rooms across the UCLan Preston campus
         </span>
 

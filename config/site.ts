@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Next.js",
+  name: "UCLan Find Me A Room",
   description:
     "Find an available room right now on the UCLan Preston Campus, using filters to find a room that suits your needs",
   mainNav: [

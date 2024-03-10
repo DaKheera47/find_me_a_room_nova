@@ -1,13 +1,17 @@
+"use client";
+
 import Link from "next/link";
 
-import { siteConfig } from "@/config/site";
-import { buttonVariants } from "@/components/ui/button";
-import { Icons } from "@/components/icons";
 import { MainNav } from "@/components/main-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { User } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
+import { siteConfig } from "@/config/site";
+import { useCommandBarStore } from "@/store/commandBarStore";
+import { Search, User } from "lucide-react";
 
 export function SiteHeader() {
+  const { toggle } = useCommandBarStore();
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
@@ -15,24 +19,19 @@ export function SiteHeader() {
 
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
-            <Link
-              href={siteConfig.links.github}
-              target="_blank"
-              rel="noreferrer"
+            <div
+              onClick={toggle}
+              className={buttonVariants({
+                size: "icon",
+                variant: "ghost",
+              })}
             >
-              <div
-                className={buttonVariants({
-                  size: "icon",
-                  variant: "ghost",
-                })}
-              >
-                <Icons.gitHub className="size-5" />
-                <span className="sr-only">GitHub</span>
-              </div>
-            </Link>
+              <Search className="size-5" />
+              <span className="sr-only">Search</span>
+            </div>
 
             <Link
-              href={siteConfig.links.github}
+              href={siteConfig.links.author}
               target="_blank"
               rel="noreferrer"
             >
