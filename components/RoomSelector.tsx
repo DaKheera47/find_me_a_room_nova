@@ -53,7 +53,7 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
 
         try {
             const response = await fetch(
-                "http://127.0.0.1:3000/get-all-room-info",
+                process.env.BACKEND_BASE_URL + "/get-all-room-info",
                 {
                     method: "POST",
                     headers: {
@@ -80,15 +80,18 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
         setIsLoading(true);
 
         try {
-            const response = await fetch("http://127.0.0.1:3000/is-room-free", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
+            const response = await fetch(
+                process.env.BACKEND_BASE_URL + "/is-room-free",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        roomName: roomName,
+                    }),
                 },
-                body: JSON.stringify({
-                    roomName: roomName,
-                }),
-            });
+            );
             const data = await response.json();
             setData(data);
         } catch (error) {
@@ -187,7 +190,10 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
                                                 {listOfRoomsToShow.map(
                                                     (room, idx) => (
                                                         <SelectItem
-                                                            key={room + selectedBuildingCode}
+                                                            key={
+                                                                room +
+                                                                selectedBuildingCode
+                                                            }
                                                             value={room}
                                                             className="capitalize"
                                                         >

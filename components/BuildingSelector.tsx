@@ -62,7 +62,8 @@ const BuildingSelector = ({ listOfBuildings }: BuildingSelector) => {
 
         try {
             const response = await fetch(
-                "http://127.0.0.1:3000/get-available-rooms-in-building",
+                process.env.BACKEND_BASE_URL +
+                    "/get-available-rooms-in-building",
                 {
                     method: "POST",
                     headers: {
