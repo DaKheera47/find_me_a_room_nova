@@ -72,6 +72,9 @@ const CalendarForTimetable = ({
             slotMinTime={slotMinTime} // Start time for calendar
             slotMaxTime={slotMaxTime} // End time for calendar
             weekends={false} // Hide weekends
+            initialDate={
+                timetable[0]?.startDateString.substring(0, 10) || new Date()
+            }
         />
     );
 };
