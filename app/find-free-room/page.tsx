@@ -1,9 +1,7 @@
 "use client";
 
-import { listOfRooms } from "@/content/listOfRooms";
-
-import RoomSelector from "@/components/RoomSelector";
-import CalendarForTimetable from "@/components/CalendarForTimetable";
+import BuildingSelector from "@/components/BuildingSelector";
+import { listOfBuildings } from "@/content/listOfBuildings";
 import useRoomStore from "@/store/roomStore";
 
 export default function IndexPage() {
@@ -28,6 +26,7 @@ export default function IndexPage() {
                 </p>
             </div>
 
+            <BuildingSelector listOfBuildings={listOfBuildings} />
         </section>
     );
 }

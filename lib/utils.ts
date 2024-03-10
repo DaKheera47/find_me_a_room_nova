@@ -5,7 +5,9 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-export function dateStringToReadable(dateString: string | undefined): string {
+export function dateStringToReadable(
+    dateString: string | undefined | Date,
+): string {
     if (!dateString) {
         return "";
     }
@@ -31,4 +33,10 @@ export function dateStringToReadable(dateString: string | undefined): string {
 
     // Combining the formatted time and date parts
     return `${formattedTime}, ${formattedDate}`;
+}
+
+export function getOrdinalNum(n: number) {
+    const s = ["th", "st", "nd", "rd"],
+        v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
