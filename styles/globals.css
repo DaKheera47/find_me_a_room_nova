@@ -88,11 +88,15 @@
 }
 
 .fc-v-event {
-    @apply text-ellipsis bg-gray-200 dark:bg-gray-800 p-1 text-xs outline-gray-200 dark:outline-gray-800 dark:text-gray-800;
+    @apply text-ellipsis bg-gray-200 p-1 text-xs outline-gray-200 dark:bg-gray-800 dark:text-gray-800 dark:outline-gray-800;
     border-color: var(--primary-foreground);
 }
 
 .fc-v-event * {
-    @apply text-black dark:text-white;
+    @apply text-black dark:font-medium dark:text-gray-200;
     border-color: var(--primary-foreground);
+}
+
+.fc .fc-toolbar {
+    @apply flex-wrap;
 }

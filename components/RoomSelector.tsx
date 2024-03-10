@@ -20,7 +20,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+import { cn, dateStringToReadable } from "@/lib/utils";
 import useRoomStore from "@/store/roomStore";
 
 type RoomDataFetcherProps = {
@@ -155,18 +155,33 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
                     </CardFooter>
                 </Card>
 
-                <Card className="w-full md:w-2/3">
-                    <CardHeader>
-                        <CardTitle>Room Data</CardTitle>
-                        <CardDescription>
-                            Data for the selected room
-                        </CardDescription>
-                    </CardHeader>
+                {data && (
+                    <Card className="w-full md:w-2/3">
+                        <CardHeader className="flex flex-row items-center justify-between">
+                            <div>
+                                <CardTitle>Room Summary</CardTitle>
+                                <CardDescription>
+                                    Summary for {selection}
+                                </CardDescription>
+                            </div>
 
-                    <CardContent>
-                        {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
-                    </CardContent>
-                </Card>
+                            <div
+                                className={cn(
+                                    "mb-6 size-8 rounded-full",
+                                    data.isFree ? "bg-green-500" : "bg-red-500",
+                                )}
+                            />
+                        </CardHeader>
+
+                        <CardContent>
+                            <p>
+                                {data.roomName} is{" "}
+                                {data.isFree ? "available" : "not available"} at{" "}
+                                {dateStringToReadable(data.dateBeingChecked)}.
+                            </p>
+                        </CardContent>
+                    </Card>
+                )}
             </div>
         </>
     );

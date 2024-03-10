@@ -62,9 +62,9 @@ const CalendarForTimetable = ({
             initialView="timeGridWeek"
             events={events}
             headerToolbar={{
-                right: "timeGridDay,timeGridWeek",
+                right: "timeGridDay,timeGridWeek prev,next",
             }}
-            height={"80vh"}
+            height={"88vh"}
             nowIndicator={true} // Show current time indicator
             expandRows={true} // Makes the calendar take up available height
             weekNumberCalculation={"ISO"} // Show ISO week numbers
