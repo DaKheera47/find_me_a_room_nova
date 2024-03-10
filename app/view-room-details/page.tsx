@@ -19,11 +19,10 @@ import { set } from "zod";
 export default function SearchBar() {
   const searchParams = useSearchParams();
 
-  const roomName = searchParams.get("room");
+  const roomName = searchParams.get("room")?.toUpperCase();
   const [data, setData] = useState<RoomData>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const isRoomNameValid = listOfRooms.includes(roomName || "");
 
   useEffect(() => {
     async function fetch() {

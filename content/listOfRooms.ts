@@ -1,5 +1,4 @@
-export const listOfRooms = [
-  "53D",
+const roomsRaw = [
   "AB012",
   "AB025",
   "AB026",
@@ -503,3 +502,8 @@ export const listOfRooms = [
   "33Es003",
   "33Es101",
 ];
+
+// remove duplicates
+const listOfRoomsNoDuplicates = Array.from(new Set(roomsRaw));
+
+export const listOfRooms = listOfRoomsNoDuplicates;
