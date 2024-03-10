@@ -3,24 +3,23 @@ export type SiteConfig = typeof siteConfig;
 export const siteConfig = {
   name: "Next.js",
   description:
-    "Beautifully designed components built with Radix UI and Tailwind CSS.",
+    "Find an available room right now on the UCLan Preston Campus, using filters to find a room that suits your needs",
   mainNav: [
     {
       title: "Home",
       href: "/",
     },
     {
-      title: "Room Availability Checker",
+      title: "Room Search",
       href: "/room-availability-checker",
     },
     {
-      title: "Free Room Finder",
+      title: "Building Search",
       href: "/find-free-room",
     },
   ],
   links: {
-    twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn/ui",
-    docs: "https://ui.shadcn.com",
+    github: "https://github.com/DaKheera47/find_me_a_room_nova",
+    author: "https://shaheersarfaraz.promirage.com/",
   },
 };

@@ -59,7 +59,7 @@ const CalendarForTimetable = ({
   return (
     <FullCalendar
       plugins={[timeGridPlugin]}
-      initialView="timeGridWeek"
+      initialView="timeGridDay"
       events={events}
       headerToolbar={{
         right: "timeGridDay,timeGridWeek prev,next",

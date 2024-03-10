@@ -55,13 +55,6 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
     setListOfRoomsToShow(out);
   };
 
-  const fetchRoomInformation = async (roomName: string) => {
-    // setIsLoading(true);
-    // setData(await getRoomData(roomName));
-    // setIsLoading(false);
-    // redirect to the room details page
-  };
-
   // Function to fetch room data
   const isRoomAvailable = async (roomName: string) => {
     setIsLoading(true);
@@ -93,7 +86,7 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
       <div className="flex w-full gap-4 max-md:flex-wrap">
         <Card className="w-full md:w-1/3">
           <CardHeader className="flex flex-row items-center justify-between">
-            <div>
+            <div className="space-y-2">
               <CardTitle>Is Room Available</CardTitle>
               <CardDescription>Find if a room is available</CardDescription>
             </div>
@@ -116,7 +109,7 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
                     onValueChange={(value) => onBuildingChange(value)}
                   >
                     <SelectTrigger id="building">
-                      <SelectValue placeholder="Select the building in which your room is" />
+                      <SelectValue placeholder="Select the building" />
                     </SelectTrigger>
 
                     <SelectContent position="popper">
@@ -141,7 +134,7 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
                     onValueChange={(value) => setSelectedRoom(value)}
                   >
                     <SelectTrigger id="room">
-                      <SelectValue placeholder="Select the room you're looking for" />
+                      <SelectValue placeholder="Select the room" />
                     </SelectTrigger>
 
                     <SelectContent position="popper">
@@ -176,38 +169,10 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
                 },
               )}
             >
-              Get Room Data
+              View Room Data
             </Link>
           </CardFooter>
         </Card>
-
-        {/* {data && (
-                    <Card className="w-full md:w-2/3">
-                        <CardHeader className="flex flex-row items-center justify-between">
-                            <div>
-                                <CardTitle>Room Summary</CardTitle>
-                                <CardDescription>
-                                    Summary for {data.roomName}
-                                </CardDescription>
-                            </div>
-
-                            <div
-                                className={cn(
-                                    "mb-6 size-8 rounded-full",
-                                    data.isFree ? "bg-green-500" : "bg-red-500",
-                                )}
-                            />
-                        </CardHeader>
-
-                        <CardContent>
-                            <p>
-                                {data.roomName} is{" "}
-                                {data.isFree ? "available" : "not available"} at{" "}
-                                {dateStringToReadable(data.dateBeingChecked)}.
-                            </p>
-                        </CardContent>
-                    </Card>
-                )} */}
       </div>
     </>
   );

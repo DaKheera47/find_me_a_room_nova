@@ -148,7 +148,7 @@ const BuildingSelector = ({ listOfBuildings }: BuildingSelector) => {
                     onValueChange={(value) => setFloor(value)}
                   >
                     <SelectTrigger id="building">
-                      <SelectValue placeholder="Select the floor you're looking for" />
+                      <SelectValue placeholder="Select the floor" />
                     </SelectTrigger>
 
                     <SelectContent position="popper">
@@ -175,7 +175,7 @@ const BuildingSelector = ({ listOfBuildings }: BuildingSelector) => {
           </CardContent>
 
           <CardFooter className="flex justify-end">
-            <Button type="submit">Get Rooms</Button>
+            <Button type="submit">Get Available Rooms</Button>
           </CardFooter>
         </form>
       </Card>
@@ -202,7 +202,7 @@ const BuildingSelector = ({ listOfBuildings }: BuildingSelector) => {
 
             <div
               className={cn(
-                "mb-6 flex size-8 items-center justify-center rounded-full font-bold text-black",
+                "flex size-4 items-center justify-center rounded-full p-4 font-bold text-black md:size-8",
                 data.length === 0 ? "bg-red-500" : "bg-green-500",
               )}
             >
@@ -217,7 +217,7 @@ const BuildingSelector = ({ listOfBuildings }: BuildingSelector) => {
                 href={`/view-room-details/?room=${room.room.name}`}
                 key={room.room.name}
               >
-                <span className="text-center text-lg font-medium capitalize">
+                <span className="text-center text-lg font-medium">
                   {room.room.name}
                 </span>
               </Link>
