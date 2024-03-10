@@ -23,6 +23,7 @@ import {
 import { BuildingInfo } from "@/content/listOfBuildings";
 import { listOfRooms } from "@/content/listOfRooms";
 import { cn, dateStringToReadable, getOrdinalNum } from "@/lib/utils";
+import Link from "next/link";
 
 type BuildingSelector = {
   listOfBuildings: BuildingInfo[];
@@ -149,6 +150,7 @@ const BuildingSelector = ({ listOfBuildings }: BuildingSelector) => {
                     <SelectTrigger id="building">
                       <SelectValue placeholder="Select the floor you're looking for" />
                     </SelectTrigger>
+
                     <SelectContent position="popper">
                       {listOfFloors.map((floor) => {
                         const floorLabel =
@@ -173,7 +175,7 @@ const BuildingSelector = ({ listOfBuildings }: BuildingSelector) => {
           </CardContent>
 
           <CardFooter className="flex justify-end">
-            <Button type="submit">Get Data</Button>
+            <Button type="submit">Get Rooms</Button>
           </CardFooter>
         </form>
       </Card>
@@ -188,9 +190,13 @@ const BuildingSelector = ({ listOfBuildings }: BuildingSelector) => {
                   ? "Ground floor"
                   : getOrdinalNum(parseInt(floor)) + " floor"}
               </CardTitle>
-              <CardDescription>
-                All available rooms in the building on{" "}
-                {dateStringToReadable(new Date())}
+
+              <CardDescription className="mt-2">
+                {data.length} rooms free in {buildingCode} on{" "}
+                {floor === "0"
+                  ? "Ground floor"
+                  : getOrdinalNum(parseInt(floor)) + " floor"}
+                . Last Checked: {dateStringToReadable(new Date())}
               </CardDescription>
             </div>
 
@@ -204,21 +210,17 @@ const BuildingSelector = ({ listOfBuildings }: BuildingSelector) => {
             </div>
           </CardHeader>
 
-          <CardContent>
+          <CardContent className="grid grid-cols-2 gap-4">
             {data.map((room) => (
-              <div key={room.room.name}>
-                <h2 className="text-xl font-bold">
-                  {room.room.name} - {room.room.buildingCode}
-                </h2>
-
-                <ul className="list-inside list-disc">
-                  {room.timetable.map((entry) => (
-                    <li key={entry.topIdx}>
-                      {entry.day} - {entry.time} - {entry.module}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <Link
+                className="flex w-full select-none flex-col justify-end rounded-md border border-neutral-400 p-6 no-underline outline-none transition-all hover:bg-neutral-400/40 hover:shadow-md"
+                href={`/view-room-details/?room=${room.room.name}`}
+                key={room.room.name}
+              >
+                <span className="text-center text-lg font-medium capitalize">
+                  {room.room.name}
+                </span>
+              </Link>
             ))}
           </CardContent>
         </Card>
