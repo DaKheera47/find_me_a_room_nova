@@ -10,8 +10,14 @@ import {
 } from "@/components/ui/card";
 import { listOfRooms } from "@/content/listOfRooms";
 import { getRoomData } from "@/lib/apiCalls";
-import { cn, dateStringToReadable } from "@/lib/utils";
+import { cleanModuleName, cn, dateStringToReadable } from "@/lib/utils";
 import { RoomData } from "@/types/roomData";
+import {
+  format,
+  formatDistanceToNow,
+  isWithinInterval,
+  parseISO,
+} from "date-fns";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 
@@ -94,7 +100,7 @@ export default function SearchBar() {
 
         <div>
           {data && (
-            <Card className="w-full md:w-1/2">
+            <Card className="w-full md:w-2/3">
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                   <CardTitle>Room Summary</CardTitle>
@@ -114,6 +120,47 @@ export default function SearchBar() {
                   {data.roomName} is{" "}
                   {data.isFree ? "available" : "not available"} at{" "}
                   {dateStringToReadable(data.dateBeingChecked)}.
+                </p>
+
+                <p>
+                  {data.timetable?.map((event) => {
+                    const startDate = event.startDateString;
+                    const endDate = event.endDateString;
+                    const currDate = new Date();
+
+                    if (!startDate || !endDate) {
+                      return null;
+                    }
+
+                    if (
+                      isWithinInterval(currDate, {
+                        start: new Date(startDate),
+                        end: new Date(endDate),
+                      })
+                    ) {
+                      return (
+                        <div key={event.module} className="mt-4 space-y-4">
+                          <div>
+                            <span>
+                              <span className="font-bold">
+                                {cleanModuleName(event.module)}
+                              </span>{" "}
+                              from {format(parseISO(startDate), "h:mma")} to{" "}
+                              {format(parseISO(endDate), "h:mma")} by{" "}
+                              <span className="font-bold">
+                                {event.lecturer}
+                              </span>
+                              .
+                            </span>
+                          </div>
+
+                          <div>
+                            <span>Ends in: {formatDistanceToNow(endDate)}</span>
+                          </div>
+                        </div>
+                      );
+                    }
+                  })}
                 </p>
               </CardContent>
             </Card>

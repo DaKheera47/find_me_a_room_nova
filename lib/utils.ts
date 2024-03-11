@@ -5,38 +5,31 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+import { parse, format, parseISO } from "date-fns";
+
 export function dateStringToReadable(
-  dateString: string | undefined | Date,
+  dateString: string | Date | undefined,
 ): string {
   if (!dateString) {
     return "";
   }
 
-  const date = new Date(dateString);
+  dateString = dateString.toString();
 
-  // Formatting the date part
-  const formattedDate = date.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  // Adjusted the format based on the input date string format you're dealing with.
+  // Removed milliseconds and timezone from the format string as they are not present in your example input.
+  const date = format(parseISO(dateString), "h:mma, d MMMM yyyy");
 
-  // Formatting the time part to include only the hour in 12-hour format with am/pm
-  const formattedTime = date
-    .toLocaleTimeString("en-GB", {
-      hour: "2-digit",
-      hour12: true,
-      minute: "2-digit",
-    })
-    .toLowerCase()
-    .replace(/ /g, "");
-
-  // Combining the formatted time and date parts
-  return `${formattedTime}, ${formattedDate}`;
+  // Format the date to the desired format "12:24pm, 11 March 2024".
+  return date.toString();
 }
 
 export function getOrdinalNum(n: number) {
   const s = ["th", "st", "nd", "rd"],
     v = n % 100;
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+export function cleanModuleName(moduleName: string) {
+  return moduleName.replace(/\(.*?\)/g, "");
 }
