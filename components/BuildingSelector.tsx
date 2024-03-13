@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 
 import {
   Card,
@@ -180,7 +180,46 @@ const BuildingSelector = ({ listOfBuildings }: BuildingSelector) => {
         </form>
       </Card>
 
-      {data && (
+      {data !== null && data.length === 0 && (
+        <Card className="w-full md:w-2/3">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>
+              There are no available rooms in {buildingCode} on{" "}
+              {floor === "0"
+                ? "Ground floor"
+                : getOrdinalNum(parseInt(floor)) + " floor"}
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent>
+            <p>
+              There are no available rooms in {buildingCode} on{" "}
+              {floor === "0"
+                ? "Ground floor"
+                : getOrdinalNum(parseInt(floor)) + " floor"}
+              . Last Checked: {dateStringToReadable(new Date().toISOString())}.
+            </p>
+
+            <p>
+              Please try another building or floor. If you believe this is an
+              error, please contact{" "}
+              <a
+                className={cn(
+                  buttonVariants({ variant: "link" }),
+                  "px-0 font-bold",
+                )}
+                href="https://shaheersarfaraz.promirage.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Shaheer Sarfaraz
+              </a>
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
+      {data && data.length > 0 && (
         <Card className="w-full md:w-2/3">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>

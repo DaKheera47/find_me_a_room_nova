@@ -122,7 +122,7 @@ export default function SearchBar() {
                   {dateStringToReadable(data.dateBeingChecked)}.
                 </p>
 
-                <p>
+                <div>
                   {data.timetable?.map((event) => {
                     const startDate = event.startDateString;
                     const endDate = event.endDateString;
@@ -161,7 +161,7 @@ export default function SearchBar() {
                       );
                     }
                   })}
-                </p>
+                </div>
               </CardContent>
             </Card>
           )}
