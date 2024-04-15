@@ -1,9 +1,6 @@
 "use client";
 
-import { useState } from "react";
-
 import { Button, buttonVariants } from "@/components/ui/button";
-
 import {
   Card,
   CardContent,
@@ -24,6 +21,7 @@ import { BuildingInfo } from "@/content/listOfBuildings";
 import { listOfRooms } from "@/content/listOfRooms";
 import { cn, dateStringToReadable, getOrdinalNum } from "@/lib/utils";
 import Link from "next/link";
+import { useState } from "react";
 
 type BuildingSelector = {
   listOfBuildings: BuildingInfo[];

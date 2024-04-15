@@ -57,6 +57,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
               <Footer />
             </div>
+
             <TailwindIndicator />
           </ThemeProvider>
         </body>

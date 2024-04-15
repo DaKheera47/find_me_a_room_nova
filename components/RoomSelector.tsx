@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 
 import {
   Card,
@@ -21,11 +21,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { listOfBuildings } from "@/content/listOfBuildings";
-import { getRoomData } from "@/lib/apiCalls";
-import { cn, dateStringToReadable } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import useRoomStore from "@/store/roomStore";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type RoomDataFetcherProps = {
   listOfRooms: string[];
