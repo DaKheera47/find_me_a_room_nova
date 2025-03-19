@@ -10,6 +10,7 @@ import { siteConfig } from "@/config/site";
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: {
@@ -39,9 +40,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       <html lang="en" suppressHydrationWarning>
+        <Script
+          defer
+          strategy="afterInteractive"
+          src="https://umami.dakheera47.com/script.js"
+          data-website-id="b03b24bd-ab9a-4cf0-bda5-c44d05166bc0"
+        />
+
         <Analytics />
 
-        <head />
         <body
           className={cn(
             "min-h-screen bg-background font-sans antialiased",
