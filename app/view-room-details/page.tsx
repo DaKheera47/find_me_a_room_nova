@@ -44,8 +44,21 @@ export default function SearchBar() {
       if (roomName) {
         // Do something with the room name
         setIsLoading(true);
-        setData(await getRoomData(roomName));
-        setIsLoading(false);
+        await getRoomData(roomName)
+          .then((data) => {
+            if (!data) {
+              setError("No data found for this room");
+              setIsLoading(false);
+              return;
+            }
+            setData(data);
+            setIsLoading(false);
+          })
+          .catch((err) => {
+            console.error(err);
+            setError("Error fetching data, " + err.message);
+            setIsLoading(false);
+          });
       }
     }
 
