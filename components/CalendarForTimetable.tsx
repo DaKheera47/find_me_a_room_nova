@@ -54,7 +54,7 @@ const CalendarForTimetable = ({
   });
 
   const slotMinTime = addHoursToTimeString(earliestTime, -0); // Subtract 1 hour for leeway
-  const slotMaxTime = addHoursToTimeString(latestTime, 0); // Add 1 hour for leeway
+  const slotMaxTime = addHoursToTimeString(latestTime, 2); // Add 1 hour for leeway
 
   return (
     <FullCalendar

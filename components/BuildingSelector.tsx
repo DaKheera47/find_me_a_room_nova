@@ -233,7 +233,7 @@ const BuildingSelector = ({ listOfBuildings }: BuildingSelector) => {
                 {floor === "0"
                   ? "Ground floor"
                   : getOrdinalNum(parseInt(floor)) + " floor"}
-                . Last Checked: {dateStringToReadable(new Date())}
+                . Last Checked: {dateStringToReadable(new Date().toISOString())}.
               </CardDescription>
             </div>
 
