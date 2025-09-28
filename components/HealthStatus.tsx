@@ -45,7 +45,9 @@ export default function HealthStatusIndicator() {
     if (error) return "Service Unavailable";
     if (!healthStatus) return "Unknown";
 
-    return healthStatus.overall === "healthy" ? "Service Online" : "Service Issues";
+    return healthStatus.overall === "healthy"
+      ? "Service Online"
+      : "Service Issues";
   };
 
   const getTooltipText = () => {
@@ -64,9 +66,7 @@ export default function HealthStatusIndicator() {
           isLoading ? "animate-pulse" : ""
         }`}
       />
-      <span className="text-xs text-muted-foreground">
-        {getStatusText()}
-      </span>
+      <span className="text-xs text-muted-foreground">{getStatusText()}</span>
     </div>
   );
 }
