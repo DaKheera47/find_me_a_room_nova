@@ -1,12 +1,14 @@
 import { siteConfig } from "@/config/site";
 import React from "react";
+import HealthStatusIndicator from "@/components/HealthStatus";
 
 type Props = {};
 
 export default function Footer({}: Props) {
   return (
     <footer className="group border-t">
-      <div className="container flex h-16 items-center justify-end max-md:my-2 md:justify-end">
+      <div className="container flex h-16 items-center justify-between max-md:my-2">
+        <HealthStatusIndicator />
         <a
           href={siteConfig.links.author}
           target="_blank"
