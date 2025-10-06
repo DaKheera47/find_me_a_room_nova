@@ -54,32 +54,6 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
     setListOfRoomsToShow(out);
   };
 
-  // Function to fetch room data
-  const isRoomAvailable = async (roomName: string) => {
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_BASE_URL + "/is-room-free",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            roomName: roomName,
-          }),
-        },
-      );
-      const data = await response.json();
-      setData(data);
-    } catch (error) {
-      console.error("Failed to fetch room data:", error);
-    }
-
-    setIsLoading(false);
-  };
-
   return (
     <>
       <div className="flex w-full gap-4 max-md:flex-wrap">

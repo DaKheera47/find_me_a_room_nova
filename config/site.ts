@@ -17,6 +17,10 @@ export const siteConfig = {
       title: "Building Search",
       href: "/find-free-room",
     },
+    {
+      title: "Timetable Converter",
+      href: "/timetable-converter",
+    },
   ],
   links: {
     github: "https://github.com/DaKheera47/find_me_a_room_nova",
