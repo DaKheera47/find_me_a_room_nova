@@ -11,13 +11,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { AlertCircle, CheckCircle2, Download } from "lucide-react";
-
-interface PreviewEvent {
-  id: string;
-  title: string;
-  start: string;
-  duration: number;
-}
+import CalendarForTimetable from "@/components/CalendarForTimetable";
+import { TimetableEntry } from "@/types/roomData";
 
 // converter
 export default function TimetableConverter() {
@@ -28,7 +23,7 @@ export default function TimetableConverter() {
     message: string;
   }>({ type: null, message: "" });
   const [icsContent, setIcsContent] = useState<string | null>(null);
-  const [previewEvents, setPreviewEvents] = useState<PreviewEvent[]>([]);
+  const [timetableEntries, setTimetableEntries] = useState<TimetableEntry[]>([]);
 
   const handleConvert = async () => {
     if (!htmlInput.trim()) {
@@ -39,7 +34,7 @@ export default function TimetableConverter() {
     setIsProcessing(true);
     setStatus({ type: null, message: "" });
     setIcsContent(null);
-    setPreviewEvents([]);
+    setTimetableEntries([]);
 
     try {
       // Sanitize HTML input before sending to backend
@@ -63,20 +58,50 @@ export default function TimetableConverter() {
 
       // Parse ICS for preview (basic parsing)
       const eventMatches = icsData.match(/BEGIN:VEVENT[\s\S]*?END:VEVENT/g) || [];
-      const events: TimetableEntry[] = eventMatches.map((eventBlock, index) => {
+
+      const timetableData: TimetableEntry[] = eventMatches.map((eventBlock, index) => {
         const summaryMatch = eventBlock.match(/SUMMARY:(.*)/);
         const dtStartMatch = eventBlock.match(/DTSTART:(.*)/);
         const durationMatch = eventBlock.match(/DURATION:PT(\d+)H?(\d+)?M/);
+        const locationMatch = eventBlock.match(/LOCATION:(.*)/);
+
+        const summary = summaryMatch?.[1]?.replace(/\\,/g, ",").replace(/\\n/g, " ") || "Untitled Event";
+        const dtStart = dtStartMatch?.[1] || "";
+        const durationHours = parseInt(durationMatch?.[1] || "0");
+        const durationMinutes = parseInt(durationMatch?.[2] || "0");
+        const location = locationMatch?.[1]?.replace(/\\,/g, ",") || "Unknown Room";
+
+        // Parse DTSTART (format: YYYYMMDDTHHMMSS)
+        const year = dtStart.substring(0, 4);
+        const month = dtStart.substring(4, 6);
+        const day = dtStart.substring(6, 8);
+        const hour = dtStart.substring(9, 11);
+        const minute = dtStart.substring(11, 13);
+
+        const startDate = new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
+        const endDate = new Date(startDate.getTime() + (durationHours * 60 + durationMinutes) * 60000);
+
+        const startDateString = startDate.toISOString().replace('.000Z', '');
+        const endDateString = endDate.toISOString().replace('.000Z', '');
+
+        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const dayName = days[startDate.getDay()];
 
         return {
-          id: `event-${index}`,
-          title: summaryMatch?.[1]?.replace(/\\,/g, ",").replace(/\\n/g, " ") || "Untitled Event",
-          start: dtStartMatch?.[1] || "",
-          duration: durationMatch ? parseInt(durationMatch[1] || "0") * 60 + parseInt(durationMatch[2] || "0") : 60,
+          topIdx: index,
+          slotInDay: index,
+          time: `${hour}:${minute}`,
+          module: summary,
+          lecturer: "",
+          group: "",
+          roomName: location,
+          day: dayName,
+          startDateString,
+          endDateString,
         };
       });
 
-      setPreviewEvents(events);
+      setTimetableEntries(timetableData);
       setStatus({
         type: "success",
         message: `Successfully parsed ${eventMatches.length} event(s)`,
@@ -193,34 +218,17 @@ export default function TimetableConverter() {
         </CardContent>
       </Card>
 
-      {previewEvents.length > 0 && (
-        <div className="w-full">
+      {timetableEntries.length > 0 && (
+        <div className="w-full max-w-full">
           <Card>
             <CardHeader>
               <CardTitle>Timetable Preview</CardTitle>
               <CardDescription>
-                Preview of your converted timetable ({previewEvents.length} events)
+                Preview of your converted timetable ({timetableEntries.length} events)
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2">
-                {previewEvents.slice(0, 10).map((event) => (
-                  <div
-                    key={event.id}
-                    className="rounded-md border p-3 text-sm"
-                  >
-                    <div className="font-medium">{event.title}</div>
-                    <div className="text-muted-foreground">
-                      {event.start} • {event.duration} minutes
-                    </div>
-                  </div>
-                ))}
-                {previewEvents.length > 10 && (
-                  <p className="text-muted-foreground text-sm">
-                    ...and {previewEvents.length - 10} more events
-                  </p>
-                )}
-              </div>
+              <CalendarForTimetable timetable={timetableEntries} />
             </CardContent>
           </Card>
         </div>
