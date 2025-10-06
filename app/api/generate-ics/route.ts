@@ -455,19 +455,6 @@ export async function POST(request: NextRequest) {
 
     const minutesBefore = Math.max(0, Number(reminderMinutes) || 15);
 
-    // save parsedEvents out
-    import("fs").then((fs) => {
-      const debugPath = "./debug_parsed_events.json";
-      fs.promises
-        .writeFile(debugPath, JSON.stringify(parsedEvents, null, 2), "utf-8")
-        .then(() => {
-          console.log(`Wrote parsed events debug file: ${debugPath}`);
-        })
-        .catch((err) => {
-          console.error("Error writing parsed events debug file:", err);
-        });
-    });
-
     // For each parsed event occurrence, build start/end Date objects
     for (const ev of parsedEvents) {
       const weekNumbers = expandWeekList(ev.weeks);
