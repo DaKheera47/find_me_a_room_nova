@@ -18,6 +18,10 @@ export const siteConfig = {
       href: "/find-free-room",
     },
     {
+      title: "Lecturer Search",
+      href: "/lecturers",
+    },
+    {
       title: "Timetable Converter",
       href: "/timetable-converter",
     },

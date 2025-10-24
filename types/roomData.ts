@@ -1,7 +1,7 @@
 // schemas/roomDataSchema.ts
 import { z } from "zod";
 
-const timetableEntrySchema = z.object({
+export const timetableEntrySchema = z.object({
   topIdx: z.number(),
   slotInDay: z.number(),
   time: z.string(),
