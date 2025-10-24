@@ -21,6 +21,43 @@ type Props = {
   lecturer: string;
 };
 
+const capitalizeToken = (token: string) => {
+  if (!token.length) return "";
+  return token[0].toUpperCase() + token.slice(1).toLowerCase();
+};
+
+const titleCaseWord = (word: string) =>
+  word
+    .split(/([-'])/)
+    .map((segment, index) => (index % 2 === 1 ? segment : capitalizeToken(segment)))
+    .join("");
+
+const toTitleCase = (value: string) =>
+  value
+    .split(/\s+/)
+    .filter(Boolean)
+    .map(titleCaseWord)
+    .join(" ");
+
+const formatLecturerName = (name: string) => {
+  const trimmed = name.trim();
+  if (!trimmed.length) return "";
+
+  const commaSeparatedParts = trimmed
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  const orderedParts =
+    commaSeparatedParts.length > 1
+      ? [...commaSeparatedParts.slice(1), commaSeparatedParts[0]]
+      : commaSeparatedParts;
+
+  if (!orderedParts.length) return "";
+
+  return toTitleCase(orderedParts.join(" "));
+};
+
 export default function LecturerScheduleClient({ lecturer }: Props) {
   const router = useRouter();
   const [data, setData] = useState<LecturerScheduleResponse | null>(null);
@@ -48,6 +85,11 @@ export default function LecturerScheduleClient({ lecturer }: Props) {
 
   const sessions = useMemo(() => data?.timetable ?? [], [data]);
 
+  const displayName = useMemo(() => {
+    const formatted = formatLecturerName(lecturer);
+    return formatted.length ? formatted : lecturer;
+  }, [lecturer]);
+
   const upcomingSessions = useMemo(() => {
     const now = new Date();
     return sessions.filter((session) => {
@@ -63,7 +105,7 @@ export default function LecturerScheduleClient({ lecturer }: Props) {
           ← Back
         </Button>
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold md:text-4xl">{lecturer}</h1>
+          <h1 className="text-3xl font-bold md:text-4xl">{displayName}</h1>
           <p className="text-muted-foreground">
             Teaching schedule aggregated from the room timetables.
           </p>
