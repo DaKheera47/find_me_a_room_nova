@@ -114,7 +114,16 @@ export default function LecturersPage() {
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[320px] p-0">
-              <Command className="max-h-72 overflow-hidden">
+              <Command
+                className="max-h-72 overflow-hidden"
+                filter={(value, search) => {
+                  const normalizedSearch = search.trim().toLowerCase()
+                  if (!normalizedSearch.length) return 1
+
+                  const normalizedValue = value.toLowerCase()
+                  return normalizedValue.includes(normalizedSearch) ? 1 : 0
+                }}
+              >
                 <CommandInput placeholder="Search lecturers..." />
                 <CommandList>
                   <CommandEmpty>No lecturer found.</CommandEmpty>
