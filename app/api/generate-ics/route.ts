@@ -403,7 +403,10 @@ export async function POST(request: NextRequest) {
         }
       }
 
+      console.log({ rawDD, crn });
+
       let location = extractCampusFromTypeStr(typeStr) || "";
+      console.log({ location, typeStr });
       if (!location && rawDD) {
         const parts = rawDD.split("~");
         if (parts[6]) location = sanitizeField(parts[6]);

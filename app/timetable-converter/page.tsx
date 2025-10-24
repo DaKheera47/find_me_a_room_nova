@@ -13,6 +13,14 @@ import {
 import { AlertCircle, CheckCircle2, Download } from "lucide-react";
 import CalendarForTimetable from "@/components/CalendarForTimetable";
 import { TimetableEntry } from "@/types/roomData";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 // converter
 export default function TimetableConverter() {
@@ -24,6 +32,7 @@ export default function TimetableConverter() {
   }>({ type: null, message: "" });
   const [icsContent, setIcsContent] = useState<string | null>(null);
   const [timetableEntries, setTimetableEntries] = useState<TimetableEntry[]>([]);
+  const [reminderMinutes, setReminderMinutes] = useState<string>("15");
 
   const handleConvert = async () => {
     if (!htmlInput.trim()) {
@@ -45,7 +54,7 @@ export default function TimetableConverter() {
       const response = await fetch("/api/generate-ics", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ html: sanitizedHtml, reminderMinutes: 15 }),
+        body: JSON.stringify({ html: sanitizedHtml, reminderMinutes: parseInt(reminderMinutes) }),
       });
 
       if (!response.ok) {
@@ -159,6 +168,24 @@ export default function TimetableConverter() {
             onChange={(e) => setHtmlInput(e.target.value)}
             className="min-h-[300px] font-mono text-xs"
           />
+
+          <div className="space-y-2">
+            <Label htmlFor="reminder-select">Notification Time</Label>
+            <Select value={reminderMinutes} onValueChange={setReminderMinutes}>
+              <SelectTrigger id="reminder-select">
+                <SelectValue placeholder="Select reminder time" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="0">No notification</SelectItem>
+                <SelectItem value="5">5 minutes before</SelectItem>
+                <SelectItem value="10">10 minutes before</SelectItem>
+                <SelectItem value="15">15 minutes before</SelectItem>
+                <SelectItem value="30">30 minutes before</SelectItem>
+                <SelectItem value="60">1 hour before</SelectItem>
+                <SelectItem value="1440">1 day before</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
           <div className="flex gap-2">
             <Button
