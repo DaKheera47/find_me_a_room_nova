@@ -73,3 +73,42 @@ export function getOrdinalNum(n: number) {
 export function cleanModuleName(moduleName: string) {
   return moduleName.replace(/\(.*?\)/g, "");
 }
+
+const capitalizeToken = (token: string) => {
+  if (!token.length) return "";
+  return token[0].toUpperCase() + token.slice(1).toLowerCase();
+};
+
+const titleCaseWord = (word: string) =>
+  word
+    .split(/([-'])/)
+    .map((segment, index) =>
+      index % 2 === 1 ? segment : capitalizeToken(segment),
+    )
+    .join("");
+
+const toTitleCase = (value: string) =>
+  value
+    .split(/\s+/)
+    .filter(Boolean)
+    .map(titleCaseWord)
+    .join(" ");
+
+export const formatLecturerName = (name: string) => {
+  const trimmed = name.trim();
+  if (!trimmed.length) return "";
+
+  const commaSeparatedParts = trimmed
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  const orderedParts =
+    commaSeparatedParts.length > 1
+      ? [...commaSeparatedParts.slice(1), commaSeparatedParts[0]]
+      : commaSeparatedParts;
+
+  if (!orderedParts.length) return "";
+
+  return toTitleCase(orderedParts.join(" "));
+};

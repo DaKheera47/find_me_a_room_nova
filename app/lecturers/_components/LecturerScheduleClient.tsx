@@ -14,48 +14,15 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { getLecturerSchedule } from "@/lib/apiCalls";
-import { cleanModuleName, dateStringToReadable } from "@/lib/utils";
+import {
+  cleanModuleName,
+  dateStringToReadable,
+  formatLecturerName,
+} from "@/lib/utils";
 import { LecturerScheduleResponse } from "@/types/lecturer";
 
 type Props = {
   lecturer: string;
-};
-
-const capitalizeToken = (token: string) => {
-  if (!token.length) return "";
-  return token[0].toUpperCase() + token.slice(1).toLowerCase();
-};
-
-const titleCaseWord = (word: string) =>
-  word
-    .split(/([-'])/)
-    .map((segment, index) => (index % 2 === 1 ? segment : capitalizeToken(segment)))
-    .join("");
-
-const toTitleCase = (value: string) =>
-  value
-    .split(/\s+/)
-    .filter(Boolean)
-    .map(titleCaseWord)
-    .join(" ");
-
-const formatLecturerName = (name: string) => {
-  const trimmed = name.trim();
-  if (!trimmed.length) return "";
-
-  const commaSeparatedParts = trimmed
-    .split(",")
-    .map((part) => part.trim())
-    .filter(Boolean);
-
-  const orderedParts =
-    commaSeparatedParts.length > 1
-      ? [...commaSeparatedParts.slice(1), commaSeparatedParts[0]]
-      : commaSeparatedParts;
-
-  if (!orderedParts.length) return "";
-
-  return toTitleCase(orderedParts.join(" "));
 };
 
 export default function LecturerScheduleClient({ lecturer }: Props) {

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Check, ChevronsUpDown, RefreshCw } from "lucide-react";
 
 import { getLecturers } from "@/lib/apiCalls";
-import { cn } from "@/lib/utils";
+import { cn, formatLecturerName } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -106,7 +106,7 @@ export default function LecturersPage() {
                 disabled={isLoading || error !== null}
               >
                 {value
-                  ? lecturers.find((lecturer) => lecturer === value)
+                  ? formatLecturerName(value) || value
                   : isLoading
                     ? "Loading lecturers..."
                     : "Select lecturer..."}
@@ -140,7 +140,7 @@ export default function LecturersPage() {
                             value === lecturer ? "opacity-100" : "opacity-0",
                           )}
                         />
-                        {lecturer}
+                        {formatLecturerName(lecturer) || lecturer}
                       </CommandItem>
                     ))}
                   </CommandGroup>

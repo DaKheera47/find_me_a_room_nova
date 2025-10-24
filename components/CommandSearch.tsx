@@ -13,11 +13,16 @@ import {
 import { listOfRooms } from "@/content/listOfRooms";
 import { useRouter } from "next/navigation";
 import { useCommandBarStore } from "@/store/commandBarStore";
+import { getLecturers } from "@/lib/apiCalls";
+import { formatLecturerName } from "@/lib/utils";
 // import { listOfBuildings } from "@/content/listOfBuildings";
 
 export default function CommandSearch() {
   const { open, setOpen, toggle } = useCommandBarStore();
   const router = useRouter();
+  const [lecturers, setLecturers] = React.useState<string[]>([]);
+  const [isLoadingLecturers, setIsLoadingLecturers] = React.useState(false);
+  const [lecturersError, setLecturersError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -38,6 +43,25 @@ export default function CommandSearch() {
   //   (building) => building.buildingName,
   // );
 
+  React.useEffect(() => {
+    const fetchLecturers = async () => {
+      setIsLoadingLecturers(true);
+      setLecturersError(null);
+
+      try {
+        const data = await getLecturers();
+        setLecturers(data.lecturers);
+      } catch (error) {
+        console.error("Failed to load lecturers for command search", error);
+        setLecturersError("Unable to load lecturers.");
+      } finally {
+        setIsLoadingLecturers(false);
+      }
+    };
+
+    fetchLecturers();
+  }, []);
+
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
       <CommandInput placeholder="Search for a building or room..." />
@@ -50,6 +74,35 @@ export default function CommandSearch() {
             <CommandItem key={building}>{building}</CommandItem>
           ))}
         </CommandGroup> */}
+
+        <CommandGroup heading="Lecturers">
+          {isLoadingLecturers && (
+            <CommandItem disabled key="loading-lecturers">
+              Loading lecturers...
+            </CommandItem>
+          )}
+
+          {lecturersError && !isLoadingLecturers && (
+            <CommandItem disabled key="error-lecturers">
+              {lecturersError}
+            </CommandItem>
+          )}
+
+          {!isLoadingLecturers &&
+            !lecturersError &&
+            lecturers.map((lecturer) => (
+              <CommandItem
+                key={lecturer}
+                value={formatLecturerName(lecturer) || lecturer}
+                onSelect={() => {
+                  setOpen(false);
+                  router.push(`/lecturers/${encodeURIComponent(lecturer)}`);
+                }}
+              >
+                {formatLecturerName(lecturer) || lecturer}
+              </CommandItem>
+            ))}
+        </CommandGroup>
 
         <CommandGroup heading="Rooms">
           {listOfRooms.map((room) => (
