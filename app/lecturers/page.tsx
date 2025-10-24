@@ -91,8 +91,7 @@ export default function LecturersPage() {
             onClick={() => fetchLecturers(true)}
             disabled={isLoading}
           >
-            <RefreshCw className={cn("size-4", isLoading && "animate-spin")}
-            />
+            <RefreshCw className={cn("size-4", isLoading && "animate-spin")} />
           </Button>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -117,11 +116,13 @@ export default function LecturersPage() {
               <Command
                 className="max-h-72 overflow-hidden"
                 filter={(value, search) => {
-                  const normalizedSearch = search.trim().toLowerCase()
-                  if (!normalizedSearch.length) return 1
+                  console.log({ value, search });
+                  const normalizedSearch = search.trim().toLowerCase();
+                  if (!normalizedSearch.length) return 1;
 
-                  const normalizedValue = value.toLowerCase()
-                  return normalizedValue.includes(normalizedSearch) ? 1 : 0
+                  const normalizedValue = value.toLowerCase();
+
+                  return normalizedValue.includes(normalizedSearch) ? 1 : 0;
                 }}
               >
                 <CommandInput placeholder="Search lecturers..." />
@@ -131,7 +132,7 @@ export default function LecturersPage() {
                     {lecturers.map((lecturer) => (
                       <CommandItem
                         key={lecturer}
-                        value={lecturer}
+                        value={formatLecturerName(lecturer) || lecturer}
                         onSelect={handleSelect}
                       >
                         <Check

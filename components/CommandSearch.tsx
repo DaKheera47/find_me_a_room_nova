@@ -90,18 +90,21 @@ export default function CommandSearch() {
 
           {!isLoadingLecturers &&
             !lecturersError &&
-            lecturers.map((lecturer) => (
-              <CommandItem
-                key={lecturer}
-                value={formatLecturerName(lecturer) || lecturer}
-                onSelect={() => {
-                  setOpen(false);
-                  router.push(`/lecturers/${encodeURIComponent(lecturer)}`);
-                }}
-              >
-                {formatLecturerName(lecturer) || lecturer}
-              </CommandItem>
-            ))}
+            lecturers.map((lecturer) => {
+              const displayName = formatLecturerName(lecturer) || lecturer;
+              return (
+                <CommandItem
+                  key={lecturer}
+                  value={displayName}
+                  onSelect={() => {
+                    setOpen(false);
+                    router.push(`/lecturers/${encodeURIComponent(lecturer)}`);
+                  }}
+                >
+                  {displayName}
+                </CommandItem>
+              );
+            })}
         </CommandGroup>
 
         <CommandGroup heading="Rooms">
