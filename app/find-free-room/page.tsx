@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { parseAsString, useQueryState } from "nuqs";
 import { getRoomsByDuration } from "@/lib/apiCalls";
 import { RoomsByDurationResponse } from "@/types/roomsByDuration";
@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export default function FindFreeRoomPage() {
+function FindFreeRoomContent() {
   const [data, setData] = useState<RoomsByDurationResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -218,5 +218,19 @@ export default function FindFreeRoomPage() {
         )}
       </div>
     </section>
+  );
+}
+
+export default function FindFreeRoomPage() {
+  return (
+    <Suspense
+      fallback={
+        <section className="container gap-6 pb-8 pt-6 md:py-10">
+          <p className="text-sm text-muted-foreground">Preparing search options...</p>
+        </section>
+      }
+    >
+      <FindFreeRoomContent />
+    </Suspense>
   );
 }
