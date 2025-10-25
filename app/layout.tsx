@@ -11,6 +11,7 @@ import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 export const metadata: Metadata = {
   title: {
@@ -49,25 +50,27 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
         <Analytics />
 
-        <body
-          className={cn(
-            "min-h-screen bg-background font-sans antialiased",
-            fontSans.variable,
-          )}
-        >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <div className="relative flex min-h-screen flex-col">
-              <CommandSearch />
+        <NuqsAdapter>
+          <body
+            className={cn(
+              "min-h-screen bg-background font-sans antialiased",
+              fontSans.variable,
+            )}
+          >
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <div className="relative flex min-h-screen flex-col">
+                <CommandSearch />
 
-              <SiteHeader />
-              <div className="flex-1">{children}</div>
+                <SiteHeader />
+                <div className="flex-1">{children}</div>
 
-              <Footer />
-            </div>
+                <Footer />
+              </div>
 
-            <TailwindIndicator />
-          </ThemeProvider>
-        </body>
+              <TailwindIndicator />
+            </ThemeProvider>
+          </body>
+        </NuqsAdapter>
       </html>
     </>
   );

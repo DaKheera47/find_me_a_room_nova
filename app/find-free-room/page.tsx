@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { parseAsString, useQueryState } from "nuqs";
 import { getRoomsByDuration } from "@/lib/apiCalls";
 import { RoomsByDurationResponse } from "@/types/roomsByDuration";
 import RoomsByDurationTable from "@/components/RoomsByDurationTable";
@@ -25,36 +26,83 @@ import {
 export default function FindFreeRoomPage() {
   const [data, setData] = useState<RoomsByDurationResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [buildingCode, setBuildingCode] = useState("");
-  const [duration, setDuration] = useState("15");
   const [error, setError] = useState<string | null>(null);
+  const [hasAutoFetched, setHasAutoFetched] = useState(false);
+  const requestIdRef = useRef(0);
 
-  // Clear data when building or duration changes
-  useEffect(() => {
-    if (data) {
-      setData(null);
+  const [buildingCode, setBuildingCode] = useQueryState(
+    "building",
+    parseAsString.withDefault(""),
+  );
+  const [duration, setDuration] = useQueryState(
+    "duration",
+    parseAsString.withDefault("15"),
+  );
+
+  const fetchRooms = useCallback(
+    async (selectedBuilding: string, selectedDuration: string) => {
+      if (!selectedBuilding) return;
+
+      const requestId = requestIdRef.current + 1;
+      requestIdRef.current = requestId;
+
+      setIsLoading(true);
       setError(null);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [buildingCode, duration]);
+
+      try {
+        const result = await getRoomsByDuration(
+          selectedBuilding,
+          parseInt(selectedDuration || "15", 10),
+        );
+
+        if (requestId === requestIdRef.current) {
+          setData(result);
+        }
+      } catch (err) {
+        if (requestId === requestIdRef.current) {
+          setError("Failed to fetch room data. Please try again.");
+        }
+        console.error("Error fetching rooms by duration:", err);
+      } finally {
+        if (requestId === requestIdRef.current) {
+          setIsLoading(false);
+        }
+      }
+    },
+    [],
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!buildingCode) return;
 
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const result = await getRoomsByDuration(buildingCode, parseInt(duration));
-      setData(result);
-    } catch (err) {
-      setError("Failed to fetch room data. Please try again.");
-      console.error("Error fetching rooms by duration:", err);
-    } finally {
-      setIsLoading(false);
-    }
+    await fetchRooms(buildingCode, duration ?? "15");
   };
+
+  const handleBuildingChange = (value: string) => {
+    void setBuildingCode(value);
+    setHasAutoFetched(false);
+  };
+
+  const handleDurationChange = (value: string) => {
+    void setDuration(value);
+    setHasAutoFetched(false);
+  };
+
+  useEffect(() => {
+    if (data) {
+      setData(null);
+      setError(null);
+    }
+  }, [buildingCode, duration]);
+
+  useEffect(() => {
+    if (hasAutoFetched) return;
+    if (!buildingCode) return;
+
+    setHasAutoFetched(true);
+    void fetchRooms(buildingCode, duration ?? "15");
+  }, [buildingCode, duration, fetchRooms, hasAutoFetched]);
 
   return (
     <section className="container gap-6 pb-8 pt-6 md:py-10">
@@ -90,7 +138,8 @@ export default function FindFreeRoomPage() {
                     <Label htmlFor="building">Building</Label>
                     <Select
                       required
-                      onValueChange={(value) => setBuildingCode(value)}
+                      value={buildingCode ?? ""}
+                      onValueChange={handleBuildingChange}
                     >
                       <SelectTrigger id="building">
                         <SelectValue placeholder="Select a building" />
@@ -112,8 +161,8 @@ export default function FindFreeRoomPage() {
                   <div>
                     <Label htmlFor="duration">Minimum Duration</Label>
                     <Select
-                      defaultValue="15"
-                      onValueChange={(value) => setDuration(value)}
+                      value={duration ?? "15"}
+                      onValueChange={handleDurationChange}
                     >
                       <SelectTrigger id="duration">
                         <SelectValue />
@@ -164,7 +213,7 @@ export default function FindFreeRoomPage() {
             buildingCode={data.buildingCode}
             totalRoomsChecked={data.totalRoomsChecked}
             roomsAvailableOverMinDuration={data.roomsAvailableOverMinDuration}
-            minDurationMinutes={parseInt(duration)}
+            minDurationMinutes={parseInt(duration ?? "15", 10)}
           />
         )}
       </div>

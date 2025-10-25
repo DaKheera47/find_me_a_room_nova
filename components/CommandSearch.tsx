@@ -15,14 +15,16 @@ import { useRouter } from "next/navigation";
 import { useCommandBarStore } from "@/store/commandBarStore";
 import { getLecturers } from "@/lib/apiCalls";
 import { formatLecturerName } from "@/lib/utils";
-// import { listOfBuildings } from "@/content/listOfBuildings";
+import { listOfBuildings } from "@/content/listOfBuildings";
 
 export default function CommandSearch() {
   const { open, setOpen, toggle } = useCommandBarStore();
   const router = useRouter();
   const [lecturers, setLecturers] = React.useState<string[]>([]);
   const [isLoadingLecturers, setIsLoadingLecturers] = React.useState(false);
-  const [lecturersError, setLecturersError] = React.useState<string | null>(null);
+  const [lecturersError, setLecturersError] = React.useState<string | null>(
+    null,
+  );
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -39,9 +41,10 @@ export default function CommandSearch() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // const buildingNames = listOfBuildings.map(
-  //   (building) => building.buildingName,
-  // );
+  const buildingData = listOfBuildings.map((building) => ({
+    name: building.buildingName,
+    code: building.buildingCode,
+  }));
 
   React.useEffect(() => {
     const fetchLecturers = async () => {
@@ -69,11 +72,21 @@ export default function CommandSearch() {
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
 
-        {/* <CommandGroup heading="Buildings">
-          {buildingNames.map((building) => (
-            <CommandItem key={building}>{building}</CommandItem>
+        <CommandGroup heading="Buildings">
+          {buildingData.map((building) => (
+            <CommandItem
+              onSelect={() => {
+                setOpen(false);
+                router.push(
+                  `/find-free-room?building=${encodeURIComponent(building.code)}`,
+                );
+              }}
+              key={building.code}
+            >
+              {building.name}
+            </CommandItem>
           ))}
-        </CommandGroup> */}
+        </CommandGroup>
 
         <CommandGroup heading="Lecturers">
           {isLoadingLecturers && (
