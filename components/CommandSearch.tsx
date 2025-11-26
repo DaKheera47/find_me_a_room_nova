@@ -13,18 +13,26 @@ import {
 import { listOfRooms } from "@/content/listOfRooms";
 import { useRouter } from "next/navigation";
 import { useCommandBarStore } from "@/store/commandBarStore";
-import { getLecturers } from "@/lib/apiCalls";
-import { formatLecturerName } from "@/lib/utils";
+import { getLecturers, getModules } from "@/lib/apiCalls";
+import { formatLecturerName, cleanModuleName } from "@/lib/utils";
 import { listOfBuildings } from "@/content/listOfBuildings";
+import { ModuleInfo } from "@/types/module";
 
 export default function CommandSearch() {
   const { open, setOpen, toggle } = useCommandBarStore();
   const router = useRouter();
+
+  // Lecturers state
   const [lecturers, setLecturers] = React.useState<string[]>([]);
   const [isLoadingLecturers, setIsLoadingLecturers] = React.useState(false);
   const [lecturersError, setLecturersError] = React.useState<string | null>(
     null,
   );
+
+  // Modules state
+  const [modules, setModules] = React.useState<ModuleInfo[]>([]);
+  const [isLoadingModules, setIsLoadingModules] = React.useState(false);
+  const [modulesError, setModulesError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -46,6 +54,7 @@ export default function CommandSearch() {
     code: building.buildingCode,
   }));
 
+  // Fetch lecturers
   React.useEffect(() => {
     const fetchLecturers = async () => {
       setIsLoadingLecturers(true);
@@ -65,9 +74,29 @@ export default function CommandSearch() {
     fetchLecturers();
   }, []);
 
+  // Fetch modules
+  React.useEffect(() => {
+    const fetchModules = async () => {
+      setIsLoadingModules(true);
+      setModulesError(null);
+
+      try {
+        const data = await getModules();
+        setModules(data.modules);
+      } catch (error) {
+        console.error("Failed to load modules for command search", error);
+        setModulesError("Unable to load modules.");
+      } finally {
+        setIsLoadingModules(false);
+      }
+    };
+
+    fetchModules();
+  }, []);
+
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
-      <CommandInput placeholder="Search for a building or room..." />
+      <CommandInput placeholder="Search buildings, rooms, lecturers, modules..." />
 
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
@@ -78,7 +107,7 @@ export default function CommandSearch() {
               onSelect={() => {
                 setOpen(false);
                 router.push(
-                  `/find-free-room?building=${encodeURIComponent(building.code)}`,
+                  `/buildings?building=${encodeURIComponent(building.code)}`,
                 );
               }}
               key={building.code}
@@ -86,6 +115,40 @@ export default function CommandSearch() {
               {building.name}
             </CommandItem>
           ))}
+        </CommandGroup>
+
+        <CommandGroup heading="Modules">
+          {isLoadingModules && (
+            <CommandItem disabled key="loading-modules">
+              Loading modules...
+            </CommandItem>
+          )}
+
+          {modulesError && !isLoadingModules && (
+            <CommandItem disabled key="error-modules">
+              {modulesError}
+            </CommandItem>
+          )}
+
+          {!isLoadingModules &&
+            !modulesError &&
+            modules.map((module) => {
+              const displayName = `${module.code} - ${cleanModuleName(module.name)}`;
+              return (
+                <CommandItem
+                  key={module.code}
+                  value={displayName}
+                  onSelect={() => {
+                    setOpen(false);
+                    router.push(
+                      `/modules?code=${encodeURIComponent(module.code)}`,
+                    );
+                  }}
+                >
+                  {displayName}
+                </CommandItem>
+              );
+            })}
         </CommandGroup>
 
         <CommandGroup heading="Lecturers">
@@ -111,7 +174,9 @@ export default function CommandSearch() {
                   value={displayName}
                   onSelect={() => {
                     setOpen(false);
-                    router.push(`/lecturers/${encodeURIComponent(lecturer)}`);
+                    router.push(
+                      `/lecturers?name=${encodeURIComponent(displayName)}`,
+                    );
                   }}
                 >
                   {displayName}
@@ -125,8 +190,7 @@ export default function CommandSearch() {
             <CommandItem
               onSelect={(value) => {
                 setOpen(false);
-                console.log("clicked on ", value);
-                router.push(`/view-room-details?room=${value}`);
+                router.push(`/rooms?room=${value}`);
               }}
               key={room}
             >

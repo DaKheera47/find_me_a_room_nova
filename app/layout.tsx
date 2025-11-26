@@ -3,7 +3,7 @@ import { Metadata, Viewport } from "next";
 
 import CommandSearch from "@/components/CommandSearch";
 import Footer from "@/components/Footer";
-import { SiteHeader } from "@/components/site-header";
+import Navbar from "@/components/shadcn-studio/blocks/navbar-component-01/navbar-component-01";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { ThemeProvider } from "@/components/theme-provider";
 import { siteConfig } from "@/config/site";
@@ -61,7 +61,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <div className="relative flex min-h-screen flex-col">
                 <CommandSearch />
 
-                <SiteHeader />
+                <Navbar />
                 <div className="flex-1">{children}</div>
 
                 <Footer />

@@ -252,7 +252,7 @@ const BuildingSelector = ({ listOfBuildings }: BuildingSelector) => {
             {data.map((room) => (
               <Link
                 className="flex w-full select-none flex-col justify-end rounded-md border border-neutral-400 p-6 no-underline outline-none transition-all hover:bg-neutral-400/40 hover:shadow-md"
-                href={`/view-room-details/?room=${room.room.name}`}
+                href={`/rooms?room=${room.room.name}`}
                 key={room.room.name}
               >
                 <span className="text-center text-lg font-medium">

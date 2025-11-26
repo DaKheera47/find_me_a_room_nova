@@ -131,7 +131,7 @@ const RoomSelector = ({ listOfRooms }: RoomDataFetcherProps) => {
             <Link
               aria-disabled={selectedRoom === " "}
               tabIndex={selectedRoom === " " ? -1 : undefined}
-              href={`/view-room-details/?room=${selectedRoom}`}
+              href={`/rooms?room=${selectedRoom}`}
               className={cn(
                 buttonVariants({
                   variant: selectedRoom === " " ? "outline" : "default",
