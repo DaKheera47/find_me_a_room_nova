@@ -132,7 +132,7 @@ export default function RoomsByDurationTable({
                       </td>
                       <td className="px-4 py-3">
                         <Link
-                          href={`/view-room-details/?room=${roomData.room.name}`}
+                          href={`/rooms?room=${roomData.room.name}`}
                           className="inline-flex items-center gap-1 text-blue-600 transition-colors hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                         >
                           View

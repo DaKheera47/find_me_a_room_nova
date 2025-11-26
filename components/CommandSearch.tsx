@@ -107,7 +107,7 @@ export default function CommandSearch() {
               onSelect={() => {
                 setOpen(false);
                 router.push(
-                  `/find-free-room?building=${encodeURIComponent(building.code)}`
+                  `/buildings?building=${encodeURIComponent(building.code)}`
                 );
               }}
               key={building.code}
@@ -190,7 +190,7 @@ export default function CommandSearch() {
             <CommandItem
               onSelect={(value) => {
                 setOpen(false);
-                router.push(`/view-room-details?room=${value}`);
+                router.push(`/rooms?room=${value}`);
               }}
               key={room}
             >

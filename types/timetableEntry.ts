@@ -1,9 +1,9 @@
-type RoomWithTimetable = {
+export type RoomWithTimetable = {
   room: Room;
   timetable: TimetableEntry[];
 };
 
-interface TimetableEntry {
+export interface TimetableEntry {
   topIdx: number;
   slotInDay: number;
   time: string;
@@ -16,13 +16,13 @@ interface TimetableEntry {
   endDateString: string;
 }
 
-interface Room {
+export interface Room {
   buildingCode: BuildingCode;
   name: string;
   url: string;
 }
 
-type BuildingCode =
+export type BuildingCode =
   | "AB"
   | "AL"
   | "BB"

@@ -11,11 +11,11 @@ export const siteConfig = {
     },
     {
       title: "Room Search",
-      href: "/room-availability-checker",
+      href: "/rooms",
     },
     {
       title: "Building Search",
-      href: "/find-free-room",
+      href: "/buildings",
     },
     {
       title: "Lecturer Search",
