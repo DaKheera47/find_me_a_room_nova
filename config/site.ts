@@ -22,6 +22,10 @@ export const siteConfig = {
       href: "/lecturers",
     },
     {
+      title: "Module Search",
+      href: "/modules",
+    },
+    {
       title: "Timetable Converter",
       href: "/timetable-converter",
     },

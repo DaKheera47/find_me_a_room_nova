@@ -9,6 +9,12 @@ import {
   lecturerListSchema,
   lecturerScheduleSchema,
 } from "@/types/lecturer";
+import {
+  ModuleListResponse,
+  ModuleScheduleResponse,
+  moduleListSchema,
+  moduleScheduleSchema,
+} from "@/types/module";
 
 // Function to fetch room data
 export const getRoomData = async (roomName: string): Promise<RoomData> => {
@@ -147,6 +153,57 @@ export const getLecturerSchedule = async (
     return lecturerScheduleSchema.parse(data);
   } catch (error) {
     console.error("Failed to fetch lecturer timetable:", error);
+    throw error;
+  }
+};
+
+// Module API calls
+export const getModules = async (): Promise<ModuleListResponse> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/modules`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch modules: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return moduleListSchema.parse(data);
+  } catch (error) {
+    console.error("Failed to fetch modules:", error);
+    throw error;
+  }
+};
+
+export const getModuleSchedule = async (
+  moduleCode: string,
+): Promise<ModuleScheduleResponse> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/modules/${encodeURIComponent(moduleCode)}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch module timetable: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return moduleScheduleSchema.parse(data);
+  } catch (error) {
+    console.error("Failed to fetch module timetable:", error);
     throw error;
   }
 };
