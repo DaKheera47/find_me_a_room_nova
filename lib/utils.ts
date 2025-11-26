@@ -33,35 +33,31 @@ export function dateStringToReadable(
   }
 
   const dateFormats = [
+    "yyyy-MM-dd'T'HH:mm:ss",      // ISO without timezone (from DB)
+    "yyyy-MM-dd'T'HH:mm:ss.SSSX", // ISO with millis and timezone
+    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", // ISO with millis and Z
+    "yyyy-MM-dd'T'HH:mm:ssX",     // ISO with timezone
     "yyyy-MM-dd",
     "MM/dd/yyyy",
     "dd-MM-yyyy HH:mm:ss",
     "EEE MMM d yyyy HH:mm:ss 'GMT'X",
-    "yyyy-MM-dd'T'HH:mm:ss.SSSX",
   ];
 
   // Convert the input date string to a date object if it's not already.
+  let parsedDate: Date | null = null;
+
   if (typeof dateString === "string") {
-    console.log("dateString before iso", dateString);
-    // dateString = parseISO(dateString);
-    console.log("dateString after iso", dateString);
-    // dateString = parse(dateString, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", new Date());
+    parsedDate = tryParseDate(dateString, dateFormats);
+  } else if (dateString instanceof Date) {
+    parsedDate = isValid(dateString) ? dateString : null;
   }
-
-  console.log(dateString);
-
-  let parsedDate = tryParseDate(dateString.toString(), dateFormats);
 
   if (!parsedDate) {
     return "Invalid date";
   }
 
-  // Adjusted the format based on the input date string format you're dealing with.
-  // Removed milliseconds and timezone from the format string as they are not present in your example input.
-  const date = format(parsedDate.toString(), "h:mma, d MMMM yyyy");
-
   // Format the date to the desired format "12:24pm, 11 March 2024".
-  return date.toString();
+  return format(parsedDate, "h:mma, d MMMM yyyy");
 }
 
 export function getOrdinalNum(n: number) {
