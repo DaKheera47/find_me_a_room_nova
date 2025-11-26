@@ -67,7 +67,7 @@ export function getOrdinalNum(n: number) {
 }
 
 export function cleanModuleName(moduleName: string) {
-  return moduleName.replace(/\(.*?\)/g, "").trim();
+  return moduleName.replace(/\(.*?\)/g, "");
 }
 
 const capitalizeToken = (token: string) => {
