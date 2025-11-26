@@ -20,6 +20,7 @@ import {
 import { BuildingInfo } from "@/content/listOfBuildings";
 import { listOfRooms } from "@/content/listOfRooms";
 import { cn, dateStringToReadable, getOrdinalNum } from "@/lib/utils";
+import { RoomWithTimetable } from "@/types/timetableEntry";
 import Link from "next/link";
 import { useState } from "react";
 
