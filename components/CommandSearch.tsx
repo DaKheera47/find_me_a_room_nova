@@ -26,7 +26,7 @@ export default function CommandSearch() {
   const [lecturers, setLecturers] = React.useState<string[]>([]);
   const [isLoadingLecturers, setIsLoadingLecturers] = React.useState(false);
   const [lecturersError, setLecturersError] = React.useState<string | null>(
-    null
+    null,
   );
 
   // Modules state
@@ -107,7 +107,7 @@ export default function CommandSearch() {
               onSelect={() => {
                 setOpen(false);
                 router.push(
-                  `/buildings?building=${encodeURIComponent(building.code)}`
+                  `/buildings?building=${encodeURIComponent(building.code)}`,
                 );
               }}
               key={building.code}
@@ -141,7 +141,7 @@ export default function CommandSearch() {
                   onSelect={() => {
                     setOpen(false);
                     router.push(
-                      `/modules?code=${encodeURIComponent(module.code)}`
+                      `/modules?code=${encodeURIComponent(module.code)}`,
                     );
                   }}
                 >
@@ -175,7 +175,7 @@ export default function CommandSearch() {
                   onSelect={() => {
                     setOpen(false);
                     router.push(
-                      `/lecturers?name=${encodeURIComponent(displayName)}`
+                      `/lecturers?name=${encodeURIComponent(displayName)}`,
                     );
                   }}
                 >
