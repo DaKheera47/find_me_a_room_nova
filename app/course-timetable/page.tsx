@@ -9,7 +9,6 @@ import {
   MapPin,
   Users,
   ChevronLeft,
-  Check,
 } from "lucide-react";
 
 import { cleanModuleName, dateStringToReadable } from "@/lib/utils";
@@ -31,6 +30,7 @@ import CalendarForTimetable from "@/components/CalendarForTimetable";
 import { useCourseTimetable } from "./useCourseTimetable";
 import { StepIndicator } from "./StepIndicator";
 import { ModuleGroupsCard } from "./ModuleGroupsCard";
+import { ModuleBadgeList } from "./ModuleBadgeList";
 import { ICSLinksCard } from "../custom-timetable/ICSLinksCard";
 
 function CourseTimetablePageContent() {
@@ -246,20 +246,10 @@ function CourseTimetablePageContent() {
 
           <CardContent className="space-y-4">
             {/* Compulsory modules info */}
-            <div className="rounded-lg border p-4 flex items-center gap-4">
-              <h4 className="text-sm font-semibold">
-                Compulsory Modules ({compulsoryModules.length})
-              </h4>
-
-              <div className="flex flex-wrap gap-2">
-                {compulsoryModules.map((m) => (
-                  <Badge key={m.moduleCode} variant="outline">
-                    <Check className="mr-1 size-3" />
-                    {m.moduleCode}
-                  </Badge>
-                ))}
-              </div>
-            </div>
+            <ModuleBadgeList
+              title="Compulsory Modules"
+              modules={compulsoryModules}
+            />
 
             {/* Optional modules selector */}
             {optionalModuleComboboxItems.length > 0 && (
@@ -283,26 +273,11 @@ function CourseTimetablePageContent() {
             )}
 
             {/* Selected optional modules list */}
-            {selectedOptionalModules.length > 0 && (
-              <div className="rounded-lg border p-4 flex items-center gap-4">
-                <h4 className="text-sm font-semibold">
-                  Selected Optional Modules ({selectedOptionalModules.length})
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {selectedOptionalModules.map((m) => (
-                    <Badge
-                      key={m.moduleCode}
-                      variant="outline"
-                      className="cursor-pointer"
-                      onClick={() => handleRemoveOptionalModule(m.moduleCode)}
-                    >
-                      {m.moduleCode}
-                      <span className="ml-1 text-destructive">×</span>
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            )}
+            <ModuleBadgeList
+              title="Selected Optional Modules"
+              modules={selectedOptionalModules}
+              onRemove={handleRemoveOptionalModule}
+            />
           </CardContent>
         </Card>
       )}

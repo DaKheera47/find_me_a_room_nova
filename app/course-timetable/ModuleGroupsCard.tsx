@@ -168,13 +168,16 @@ function ModuleAccordionItem({
               {cleanModuleName(module.moduleName)}
             </span>
           </div>
+
           <div className="flex items-center gap-2">
             {isCompulsory && <Lock className="size-3 text-muted-foreground" />}
+
             {!module.isLoadingGroups && module.availableGroups.length > 0 && (
               <Badge variant="outline">
                 {module.selectedGroups.length}/{module.availableGroups.length}
               </Badge>
             )}
+
             {!isCompulsory && onRemove && (
               <Button
                 variant="ghost"
@@ -191,6 +194,7 @@ function ModuleAccordionItem({
           </div>
         </div>
       </AccordionTrigger>
+
       <AccordionContent>
         <div className="space-y-3 pt-2">
           {module.isLoadingGroups ? (
@@ -200,11 +204,13 @@ function ModuleAccordionItem({
             </div>
           ) : module.sessionCount === 0 ? (
             <p className="text-sm text-amber-600 dark:text-amber-400">
-              No timetable sessions found for this module. It may not have been assigned a room yet.
+              No timetable sessions found for this module. It may not have been
+              assigned a room yet.
             </p>
           ) : module.availableGroups.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              {module.sessionCount} session(s) found without specific groups. All sessions will be included in your timetable.
+              {module.sessionCount} session(s) found without specific groups.
+              All sessions will be included in your timetable.
             </p>
           ) : (
             <div className="flex flex-wrap gap-2">
@@ -214,11 +220,13 @@ function ModuleAccordionItem({
                   className="flex cursor-pointer items-center gap-2 rounded-md border px-3 py-2 hover:bg-accent"
                 >
                   <Checkbox
+                    className="flex items-center"
                     checked={module.selectedGroups.includes(group)}
                     onCheckedChange={() =>
                       onToggleGroup(module.moduleCode, group, isCompulsory)
                     }
                   />
+
                   <span className="text-sm">
                     {group.startsWith("/") ? group.slice(1) : group}
                   </span>

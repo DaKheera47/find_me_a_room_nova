@@ -84,14 +84,14 @@ export function SearchableCombobox({
   };
 
   return (
-    <Card className={cn("max-w-[50%]", className)}>
+    <Card className={cn("xl:max-w-[50%]", className)}>
       <CardHeader className="flex flex-row items-start justify-between gap-4">
         <div>
           <CardTitle className="flex items-center gap-2">
             {icon}
             {title}
           </CardTitle>
-          <CardDescription>{description}</CardDescription>
+          <CardDescription className="mt-2">{description}</CardDescription>
         </div>
 
         {onRefresh && (
@@ -117,15 +117,17 @@ export function SearchableCombobox({
                 className="w-full justify-between"
                 disabled={isLoading || error !== null}
               >
-                {selectedItem
-                  ? selectedItem.sublabel
-                    ? `${selectedItem.label} - ${selectedItem.sublabel}`
-                    : selectedItem.label
-                  : selectedValue
-                    ? selectedValue
-                    : isLoading
-                      ? loadingMessage
-                      : placeholder}
+                <span className="truncate">
+                  {selectedItem
+                    ? selectedItem.sublabel
+                      ? `${selectedItem.label} - ${selectedItem.sublabel}`
+                      : selectedItem.label
+                    : selectedValue
+                      ? selectedValue
+                      : isLoading
+                        ? loadingMessage
+                        : placeholder}
+                </span>
                 <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
