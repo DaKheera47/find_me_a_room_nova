@@ -226,13 +226,7 @@ function CourseTimetablePageContent() {
       {linkError && <ErrorAlert message={linkError} />}
 
       {/* ICS Links */}
-      {icsData && (
-        <ICSLinksCard
-          icsData={icsData}
-          copiedUrl={copiedUrl}
-          handleCopyUrl={handleCopyUrl}
-        />
-      )}
+      {icsData && <ICSLinksCard icsData={icsData} />}
 
       {/* Preview */}
       {isPreviewLoading && <LoadingSpinner message="Loading preview..." />}
