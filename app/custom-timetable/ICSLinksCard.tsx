@@ -1,6 +1,7 @@
 "use client";
 
-import { Calendar, Link, Download } from "lucide-react";
+import { useState } from "react";
+import { Calendar, Link, Download, Copy, Check } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -16,6 +17,18 @@ interface ICSLinksCardProps {
 }
 
 export function ICSLinksCard({ icsData }: ICSLinksCardProps) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(icsData.icsUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy link:", err);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -42,6 +55,20 @@ export function ICSLinksCard({ icsData }: ICSLinksCardProps) {
               <Download className="mr-2 size-4" />
               Download (.ics)
             </a>
+          </Button>
+
+          <Button variant="outline" onClick={handleCopyLink}>
+            {copied ? (
+              <>
+                <Check className="mr-2 size-4" />
+                Copied!
+              </>
+            ) : (
+              <>
+                <Copy className="mr-2 size-4" />
+                Copy Link
+              </>
+            )}
           </Button>
         </div>
 
