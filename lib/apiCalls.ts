@@ -24,6 +24,12 @@ import {
   timetablePreviewSchema,
   icsLinkResponseSchema,
 } from "@/types/customTimetable";
+import {
+  CourseListResponse,
+  CourseDetailsResponse,
+  courseListSchema,
+  courseDetailsSchema,
+} from "@/types/course";
 
 // Function to fetch room data
 export const getRoomData = async (roomName: string): Promise<RoomData> => {
@@ -294,6 +300,64 @@ export const generateICSLink = async (
     return icsLinkResponseSchema.parse(data);
   } catch (error) {
     console.error("Failed to generate ICS link:", error);
+    throw error;
+  }
+};
+
+// Course API calls
+export const getCourses = async (
+  type?: "undergrad" | "postgrad",
+  search?: string,
+): Promise<CourseListResponse> => {
+  try {
+    const params = new URLSearchParams();
+    if (type) params.append("type", type);
+    if (search) params.append("search", search);
+
+    const queryString = params.toString();
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/courses${queryString ? `?${queryString}` : ""}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch courses: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return courseListSchema.parse(data);
+  } catch (error) {
+    console.error("Failed to fetch courses:", error);
+    throw error;
+  }
+};
+
+export const getCourseDetails = async (
+  courseId: number,
+): Promise<CourseDetailsResponse> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/courses/${courseId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch course details: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return courseDetailsSchema.parse(data);
+  } catch (error) {
+    console.error("Failed to fetch course details:", error);
     throw error;
   }
 };
