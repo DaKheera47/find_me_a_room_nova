@@ -171,7 +171,7 @@ function ModuleAccordionItem({
           <div className="flex items-center gap-2">
             {isCompulsory && <Lock className="size-3 text-muted-foreground" />}
             {!module.isLoadingGroups && module.availableGroups.length > 0 && (
-              <Badge variant="secondary">
+              <Badge variant="outline">
                 {module.selectedGroups.length}/{module.availableGroups.length}
               </Badge>
             )}

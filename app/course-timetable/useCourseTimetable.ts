@@ -168,7 +168,6 @@ export function useCourseTimetable() {
 
       // Reset downstream
       setSelectedOptionalModules([]);
-      setOpenAccordions([]);
       setPreviewEvents([]);
       setIcsData(null);
       setCurrentStep(3);
@@ -186,6 +185,9 @@ export function useCourseTimetable() {
       );
 
       setCompulsoryModules(compulsoryToAdd);
+
+      // Open all compulsory module accordions by default
+      setOpenAccordions(compulsoryToAdd.map((m) => m.moduleCode));
 
       // Load groups for all compulsory modules
       for (const mod of compulsoryToAdd) {

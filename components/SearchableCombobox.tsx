@@ -51,6 +51,7 @@ type SearchableComboboxProps = {
   lastUpdated?: string | null;
   itemCount?: number;
   popoverWidth?: string;
+  className?: string;
 };
 
 export function SearchableCombobox({
@@ -71,6 +72,7 @@ export function SearchableCombobox({
   lastUpdated,
   itemCount,
   popoverWidth = "w-[400px]",
+  className,
 }: SearchableComboboxProps) {
   const [open, setOpen] = React.useState(false);
 
@@ -82,7 +84,7 @@ export function SearchableCombobox({
   };
 
   return (
-    <Card className="max-w-xl">
+    <Card className={cn("max-w-[50%]", className)}>
       <CardHeader className="flex flex-row items-start justify-between gap-4">
         <div>
           <CardTitle className="flex items-center gap-2">

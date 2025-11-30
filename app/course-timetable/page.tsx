@@ -85,45 +85,49 @@ function CourseTimetablePageContent() {
       {/* Step Indicator */}
       <StepIndicator steps={steps} currentStep={currentStep} />
 
-      {/* Step 1: Course Selection */}
-      <SearchableCombobox
-        title="Step 1: Select Your Course"
-        description="Search for your degree programme to get started."
-        icon={<GraduationCap className="size-5" />}
-        placeholder="Search for a course..."
-        searchPlaceholder="Search by course name..."
-        emptyMessage="No course found."
-        loadingMessage="Loading courses..."
-        items={courseComboboxItems}
-        selectedValue={courseState.selectedCourse?.id.toString() || ""}
-        onSelect={(value) => handleSelectCourse(parseInt(value, 10))}
-        onClear={handleClearCourse}
-        onRefresh={fetchCourses}
-        isLoading={isCoursesLoading}
-        error={coursesError}
-        itemCount={courses.length}
-        popoverWidth="w-[500px]"
-      />
-
-      {/* Step 2: Year Selection */}
-      {courseState.selectedCourse && (
+      <div className="flex flex-wrap gap-4">
+        {/* Step 1: Course Selection */}
         <SearchableCombobox
-          title="Step 2: Choose Your Year"
-          description={`Select your year of study for ${courseState.selectedCourse.title}`}
-          icon={<Calendar className="size-5" />}
-          placeholder="Select your year..."
-          searchPlaceholder="Search years..."
-          emptyMessage="No years found for this course."
-          loadingMessage="Loading years..."
-          items={yearComboboxItems}
-          selectedValue={courseState.selectedYear?.id.toString() || ""}
-          onSelect={(value) => handleSelectYear(parseInt(value, 10))}
-          onClear={handleClearYear}
-          isLoading={courseState.isLoadingCourse}
-          error={null}
-          itemCount={courseState.years.length}
+          className="w-full flex-1"
+          title="Step 1: Select Your Course"
+          description="Search for your degree programme to get started."
+          icon={<GraduationCap className="size-5" />}
+          placeholder="Search for a course..."
+          searchPlaceholder="Search by course name..."
+          emptyMessage="No course found."
+          loadingMessage="Loading courses..."
+          items={courseComboboxItems}
+          selectedValue={courseState.selectedCourse?.id.toString() || ""}
+          onSelect={(value) => handleSelectCourse(parseInt(value, 10))}
+          onClear={handleClearCourse}
+          onRefresh={fetchCourses}
+          isLoading={isCoursesLoading}
+          error={coursesError}
+          itemCount={courses.length}
+          popoverWidth="w-[500px]"
         />
-      )}
+
+        {/* Step 2: Year Selection */}
+        {courseState.selectedCourse && (
+          <SearchableCombobox
+            className="w-full flex-1"
+            title="Step 2: Choose Your Year"
+            description={`Select your year of study for ${courseState.selectedCourse.title}`}
+            icon={<Calendar className="size-5" />}
+            placeholder="Select your year..."
+            searchPlaceholder="Search years..."
+            emptyMessage="No years found for this course."
+            loadingMessage="Loading years..."
+            items={yearComboboxItems}
+            selectedValue={courseState.selectedYear?.id.toString() || ""}
+            onSelect={(value) => handleSelectYear(parseInt(value, 10))}
+            onClear={handleClearYear}
+            isLoading={courseState.isLoadingCourse}
+            error={null}
+            itemCount={courseState.years.length}
+          />
+        )}
+      </div>
 
       {/* Step 3: Optional Module Selection */}
       {courseState.selectedYear && (
@@ -138,15 +142,17 @@ function CourseTimetablePageContent() {
               Select any optional modules you&apos;re taking.
             </CardDescription>
           </CardHeader>
+
           <CardContent className="space-y-4">
             {/* Compulsory modules info */}
-            <div className="rounded-lg border bg-muted/50 p-4">
-              <h4 className="mb-2 text-sm font-semibold">
+            <div className="rounded-lg border p-4 flex items-center gap-4">
+              <h4 className="text-sm font-semibold">
                 Compulsory Modules ({compulsoryModules.length})
               </h4>
+
               <div className="flex flex-wrap gap-2">
                 {compulsoryModules.map((m) => (
-                  <Badge key={m.moduleCode} variant="secondary">
+                  <Badge key={m.moduleCode} variant="outline">
                     <Check className="mr-1 size-3" />
                     {m.moduleCode}
                   </Badge>
@@ -171,13 +177,14 @@ function CourseTimetablePageContent() {
                 isLoading={false}
                 error={null}
                 itemCount={optionalModuleComboboxItems.length}
+                popoverWidth="w-[500px]"
               />
             )}
 
             {/* Selected optional modules list */}
             {selectedOptionalModules.length > 0 && (
-              <div className="rounded-lg border p-4">
-                <h4 className="mb-2 text-sm font-semibold">
+              <div className="rounded-lg border p-4 flex items-center gap-4">
+                <h4 className="text-sm font-semibold">
                   Selected Optional Modules ({selectedOptionalModules.length})
                 </h4>
                 <div className="flex flex-wrap gap-2">

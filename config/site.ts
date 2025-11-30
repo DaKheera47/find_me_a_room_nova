@@ -29,14 +29,6 @@ export const siteConfig = {
       title: "Course Timetable",
       href: "/course-timetable",
     },
-    {
-      title: "Custom Timetable",
-      href: "/custom-timetable",
-    },
-    {
-      title: "Timetable Converter",
-      href: "/timetable-converter",
-    },
   ],
   links: {
     github: "https://github.com/DaKheera47/find_me_a_room_nova",
