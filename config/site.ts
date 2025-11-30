@@ -26,8 +26,8 @@ export const siteConfig = {
       href: "/modules",
     },
     {
-      title: "Timetable Converter",
-      href: "/timetable-converter",
+      title: "Course Timetable",
+      href: "/course-timetable",
     },
   ],
   links: {

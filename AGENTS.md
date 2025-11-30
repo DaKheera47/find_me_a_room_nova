@@ -1,7 +1,7 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `app/` uses the Next.js App Router; feature routes such as `find-free-room` and `timetable-converter` group page-level layouts and server components.
+- `app/` uses the Next.js App Router; feature routes such as `find-free-room` and `course-timetable` group page-level layouts and server components.
 - `components/` holds reusable UI primitives, while `lib/` centralizes API calls, font loaders, and helpers; reach for these folders before introducing new utilities.
 - Zustand state lives in `store/`, shared schemas in `types/`, and configuration (navigation, metadata) in `config/`.
 - `public/` stores static assets, `styles/` contains Tailwind layers; avoid editing the generated `out/` directory.

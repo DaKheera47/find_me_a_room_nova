@@ -15,6 +15,21 @@ import {
   moduleListSchema,
   moduleScheduleSchema,
 } from "@/types/module";
+import {
+  ModuleSelection,
+  ModuleGroupsResponse,
+  TimetablePreviewResponse,
+  ICSLinkResponse,
+  moduleGroupsSchema,
+  timetablePreviewSchema,
+  icsLinkResponseSchema,
+} from "@/types/customTimetable";
+import {
+  CourseListResponse,
+  CourseDetailsResponse,
+  courseListSchema,
+  courseDetailsSchema,
+} from "@/types/course";
 
 // Function to fetch room data
 export const getRoomData = async (roomName: string): Promise<RoomData> => {
@@ -204,6 +219,145 @@ export const getModuleSchedule = async (
     return moduleScheduleSchema.parse(data);
   } catch (error) {
     console.error("Failed to fetch module timetable:", error);
+    throw error;
+  }
+};
+
+// Custom Timetable / ICS API calls
+export const getModuleGroups = async (
+  moduleCode: string,
+): Promise<ModuleGroupsResponse> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/modules/${encodeURIComponent(moduleCode)}/groups`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch module groups: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return moduleGroupsSchema.parse(data);
+  } catch (error) {
+    console.error("Failed to fetch module groups:", error);
+    throw error;
+  }
+};
+
+export const getTimetablePreview = async (
+  selections: ModuleSelection[],
+): Promise<TimetablePreviewResponse> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/timetable/preview`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ selections }),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch timetable preview: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return timetablePreviewSchema.parse(data);
+  } catch (error) {
+    console.error("Failed to fetch timetable preview:", error);
+    throw error;
+  }
+};
+
+export const generateICSLink = async (
+  selections: ModuleSelection[],
+): Promise<ICSLinkResponse> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/timetable/generate-link`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ selections }),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to generate ICS link: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return icsLinkResponseSchema.parse(data);
+  } catch (error) {
+    console.error("Failed to generate ICS link:", error);
+    throw error;
+  }
+};
+
+// Course API calls
+export const getCourses = async (
+  type?: "undergrad" | "postgrad",
+  search?: string,
+): Promise<CourseListResponse> => {
+  try {
+    const params = new URLSearchParams();
+    if (type) params.append("type", type);
+    if (search) params.append("search", search);
+
+    const queryString = params.toString();
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/courses${queryString ? `?${queryString}` : ""}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch courses: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return courseListSchema.parse(data);
+  } catch (error) {
+    console.error("Failed to fetch courses:", error);
+    throw error;
+  }
+};
+
+export const getCourseDetails = async (
+  courseId: number,
+): Promise<CourseDetailsResponse> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/courses/${courseId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch course details: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return courseDetailsSchema.parse(data);
+  } catch (error) {
+    console.error("Failed to fetch course details:", error);
     throw error;
   }
 };
