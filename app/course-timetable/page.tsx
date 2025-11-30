@@ -8,7 +8,7 @@ import {
   Clock,
   MapPin,
   Users,
-  ChevronRight,
+  ChevronLeft,
   Check,
 } from "lucide-react";
 
@@ -20,6 +20,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SearchableCombobox } from "@/components/SearchableCombobox";
 import { PageHeader } from "@/components/PageHeader";
@@ -66,6 +67,8 @@ function CourseTimetablePageContent() {
     handleGenerateLink,
     copiedUrl,
     handleCopyUrl,
+    viewMode,
+    handleBackToConfig,
   } = useCourseTimetable();
 
   const steps = [
@@ -75,6 +78,104 @@ function CourseTimetablePageContent() {
     { number: 4, label: "Configure Groups", completed: false },
   ];
 
+  // Output View - shows ICS links and preview/calendar
+  if (viewMode === "output" && icsData) {
+    return (
+      <section className="container space-y-8 pb-12 pt-10">
+        <PageHeader
+          title="Your Timetable is Ready!"
+          description="Subscribe to your calendar or download the ICS file. You can go back to modify your selections."
+        />
+
+        {/* Back Button */}
+        <Button variant="outline" onClick={handleBackToConfig}>
+          <ChevronLeft className="mr-2 size-4" />
+          Back to Configuration
+        </Button>
+
+        {/* ICS Links */}
+        <ICSLinksCard icsData={icsData} />
+
+        {/* Errors */}
+        {previewError && <ErrorAlert message={previewError} />}
+
+        {/* Preview */}
+        {isPreviewLoading && <LoadingSpinner message="Loading preview..." />}
+
+        {!isPreviewLoading && previewEvents.length > 0 && (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Timetable Preview</CardTitle>
+                <CardDescription>
+                  {previewEvents.length} session(s) found for your selected
+                  modules and groups.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="max-h-96 space-y-3 overflow-y-auto">
+                  {previewEvents.slice(0, 20).map((event, idx) => (
+                    <div
+                      key={`${event.id}-${idx}`}
+                      className="rounded-lg border p-3"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="space-y-1">
+                          <p className="font-medium">
+                            {event.moduleCode} - {event.group || "Session"}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            {cleanModuleName(event.moduleName || event.module)}
+                          </p>
+                          <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                            <span className="flex items-center gap-1">
+                              <Clock className="size-3" />
+                              {dateStringToReadable(event.startDateString)}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <MapPin className="size-3" />
+                              {event.roomName}
+                            </span>
+                            {event.lecturer && (
+                              <span className="flex items-center gap-1">
+                                <Users className="size-3" />
+                                {event.lecturer}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <Badge variant="outline">{event.time}</Badge>
+                      </div>
+                    </div>
+                  ))}
+                  {previewEvents.length > 20 && (
+                    <p className="text-center text-sm text-muted-foreground">
+                      +{previewEvents.length - 20} more sessions
+                    </p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Calendar View */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Weekly Calendar View</CardTitle>
+                <CardDescription>
+                  Visual overview of your course timetable.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="px-6 pb-6 pt-0">
+                <CalendarForTimetable timetable={timetableEntries} />
+              </CardContent>
+            </Card>
+          </div>
+        )}
+      </section>
+    );
+  }
+
+  // Configuration View - shows course/year/module selection and group configuration
   return (
     <section className="container space-y-8 pb-12 pt-10">
       <PageHeader
@@ -224,82 +325,6 @@ function CourseTimetablePageContent() {
       {/* Errors */}
       {previewError && <ErrorAlert message={previewError} />}
       {linkError && <ErrorAlert message={linkError} />}
-
-      {/* ICS Links */}
-      {icsData && <ICSLinksCard icsData={icsData} />}
-
-      {/* Preview */}
-      {isPreviewLoading && <LoadingSpinner message="Loading preview..." />}
-
-      {!isPreviewLoading && previewEvents.length > 0 && (
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Timetable Preview</CardTitle>
-              <CardDescription>
-                {previewEvents.length} session(s) found for your selected
-                modules and groups.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="max-h-96 space-y-3 overflow-y-auto">
-                {previewEvents.slice(0, 20).map((event, idx) => (
-                  <div
-                    key={`${event.id}-${idx}`}
-                    className="rounded-lg border p-3"
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="space-y-1">
-                        <p className="font-medium">
-                          {event.moduleCode} - {event.group || "Session"}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {cleanModuleName(event.moduleName || event.module)}
-                        </p>
-                        <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <Clock className="size-3" />
-                            {dateStringToReadable(event.startDateString)}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <MapPin className="size-3" />
-                            {event.roomName}
-                          </span>
-                          {event.lecturer && (
-                            <span className="flex items-center gap-1">
-                              <Users className="size-3" />
-                              {event.lecturer}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      <Badge variant="outline">{event.time}</Badge>
-                    </div>
-                  </div>
-                ))}
-                {previewEvents.length > 20 && (
-                  <p className="text-center text-sm text-muted-foreground">
-                    +{previewEvents.length - 20} more sessions
-                  </p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Calendar View */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Weekly Calendar View</CardTitle>
-              <CardDescription>
-                Visual overview of your course timetable.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="px-6 pb-6 pt-0">
-              <CalendarForTimetable timetable={timetableEntries} />
-            </CardContent>
-          </Card>
-        </div>
-      )}
     </section>
   );
 }

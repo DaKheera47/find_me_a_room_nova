@@ -79,6 +79,9 @@ export function useCourseTimetable() {
   // Current step in the flow
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
 
+  // View mode: "config" for configuration screen, "output" for viewing/subscribe screen
+  const [viewMode, setViewMode] = useState<"config" | "output">("config");
+
   // Fetch courses list
   const fetchCourses = useCallback(async () => {
     setIsCoursesLoading(true);
@@ -407,6 +410,8 @@ export function useCourseTimetable() {
     try {
       const data = await generateICSLink(selections);
       setIcsData(data);
+      // Switch to output view on success
+      setViewMode("output");
     } catch (err) {
       console.error(err);
       setLinkError("Failed to generate ICS link. Please try again.");
@@ -414,6 +419,11 @@ export function useCourseTimetable() {
       setIsGeneratingLink(false);
     }
   }, [allSelectedModules]);
+
+  // Go back to configuration screen
+  const handleBackToConfig = useCallback(() => {
+    setViewMode("config");
+  }, []);
 
   // Copy URL to clipboard
   const handleCopyUrl = useCallback(async (url: string) => {
@@ -541,5 +551,9 @@ export function useCourseTimetable() {
     handleGenerateLink,
     copiedUrl,
     handleCopyUrl,
+
+    // View mode
+    viewMode,
+    handleBackToConfig,
   };
 }
