@@ -25,6 +25,7 @@ export interface ModuleWithGroups {
   availableGroups: string[];
   selectedGroups: string[];
   isLoadingGroups: boolean;
+  sessionCount: number;
 }
 
 export interface CourseState {
@@ -181,6 +182,7 @@ export function useCourseTimetable() {
           availableGroups: [],
           selectedGroups: [],
           isLoadingGroups: true,
+          sessionCount: 0,
         }),
       );
 
@@ -207,6 +209,7 @@ export function useCourseTimetable() {
                     availableGroups: groups,
                     selectedGroups: preselectedGroups,
                     isLoadingGroups: false,
+                    sessionCount: groupsData.sessionCount,
                   }
                 : m,
             ),
@@ -216,7 +219,7 @@ export function useCourseTimetable() {
           setCompulsoryModules((prev) =>
             prev.map((m) =>
               m.moduleCode === mod.moduleCode
-                ? { ...m, isLoadingGroups: false, availableGroups: [] }
+                ? { ...m, isLoadingGroups: false, availableGroups: [], sessionCount: 0 }
                 : m,
             ),
           );
@@ -264,6 +267,7 @@ export function useCourseTimetable() {
         availableGroups: [],
         selectedGroups: [],
         isLoadingGroups: true,
+        sessionCount: 0,
       };
 
       setSelectedOptionalModules((prev) => [...prev, newModule]);
@@ -286,6 +290,7 @@ export function useCourseTimetable() {
                   availableGroups: groups,
                   selectedGroups: preselectedGroups,
                   isLoadingGroups: false,
+                  sessionCount: groupsData.sessionCount,
                 }
               : m,
           ),
@@ -295,7 +300,7 @@ export function useCourseTimetable() {
         setSelectedOptionalModules((prev) =>
           prev.map((m) =>
             m.moduleCode === moduleCode
-              ? { ...m, isLoadingGroups: false, availableGroups: [] }
+              ? { ...m, isLoadingGroups: false, availableGroups: [], sessionCount: 0 }
               : m,
           ),
         );

@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy, Check, ExternalLink, Calendar, Link } from "lucide-react";
+import { Copy, Check, ExternalLink, Calendar, Link, Download } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -35,6 +35,25 @@ export function ICSLinksCard({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Download ICS File */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">
+            <Download className="mr-2 inline size-4" />
+            Download ICS File
+          </label>
+          <div className="flex gap-2">
+            <Button variant="default" asChild className="flex-1">
+              <a href={icsData.icsUrl} download="timetable.ics">
+                <Download className="mr-2 size-4" />
+                Download Timetable (.ics)
+              </a>
+            </Button>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Download and import directly into your calendar app
+          </p>
+        </div>
+
         {/* ICS URL */}
         <div className="space-y-2">
           <label className="text-sm font-medium">

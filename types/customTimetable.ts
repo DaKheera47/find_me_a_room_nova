@@ -11,6 +11,7 @@ export const moduleGroupsSchema = z.object({
   moduleCode: z.string(),
   groups: z.array(z.string()),
   count: z.number(),
+  sessionCount: z.number(),
 });
 
 // Preview event

@@ -198,9 +198,13 @@ function ModuleAccordionItem({
               <LoadingSpinner />
               Loading groups...
             </div>
+          ) : module.sessionCount === 0 ? (
+            <p className="text-sm text-amber-600 dark:text-amber-400">
+              No timetable sessions found for this module. It may not have been assigned a room yet.
+            </p>
           ) : module.availableGroups.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              No specific groups found. All sessions will be included.
+              {module.sessionCount} session(s) found without specific groups. All sessions will be included in your timetable.
             </p>
           ) : (
             <div className="flex flex-wrap gap-2">
