@@ -106,6 +106,7 @@ export default function CommandSearch() {
           {buildingData.map((building) => (
             <CommandItem
               onSelect={() => {
+                // Track with default 15 minute duration (matches buildings page default)
                 trackBuildingSearch(building.code, 15, "command-search");
                 setOpen(false);
                 router.push(
