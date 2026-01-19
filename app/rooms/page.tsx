@@ -29,6 +29,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { ErrorAlert } from "@/components/ErrorAlert";
 import CalendarForTimetable from "@/components/CalendarForTimetable";
+import { trackRoomSearch, trackRoomView } from "@/lib/umami";
 
 function ViewRoomDetailsContent() {
   const router = useRouter();
@@ -64,6 +65,8 @@ function ViewRoomDetailsContent() {
         setError("No data found for this room");
       } else {
         setData(result);
+        // Track successful room view
+        trackRoomView(roomName);
       }
     } catch (err) {
       console.error(err);
@@ -91,6 +94,7 @@ function ViewRoomDetailsContent() {
   }, [selectedRoom]);
 
   const handleSelect = (roomName: string) => {
+    trackRoomSearch(roomName, "room-page");
     setSelectedRoom(roomName);
     router.push(`/rooms?room=${encodeURIComponent(roomName)}`, {
       scroll: false,

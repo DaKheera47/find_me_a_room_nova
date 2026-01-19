@@ -17,6 +17,7 @@ import { getLecturers, getModules } from "@/lib/apiCalls";
 import { formatLecturerName, cleanModuleName } from "@/lib/utils";
 import { listOfBuildings } from "@/content/listOfBuildings";
 import { ModuleInfo } from "@/types/module";
+import { trackRoomSearch, trackBuildingSearch } from "@/lib/umami";
 
 export default function CommandSearch() {
   const { open, setOpen, toggle } = useCommandBarStore();
@@ -105,6 +106,7 @@ export default function CommandSearch() {
           {buildingData.map((building) => (
             <CommandItem
               onSelect={() => {
+                trackBuildingSearch(building.code, 15, "command-search");
                 setOpen(false);
                 router.push(
                   `/buildings?building=${encodeURIComponent(building.code)}`,
@@ -189,6 +191,7 @@ export default function CommandSearch() {
           {listOfRooms.map((room) => (
             <CommandItem
               onSelect={(value) => {
+                trackRoomSearch(value, "command-search");
                 setOpen(false);
                 router.push(`/rooms?room=${value}`);
               }}
