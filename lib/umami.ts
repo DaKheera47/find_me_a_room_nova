@@ -5,11 +5,14 @@
  * Umami automatically tracks page views, so these functions are for custom event tracking only.
  */
 
+// Type for event data that can be sent to Umami
+type EventData = Record<string, string | number | boolean>;
+
 // Extend the Window interface to include umami
 declare global {
   interface Window {
     umami?: {
-      track: (eventName: string, eventData?: Record<string, any>) => void;
+      track: (eventName: string, eventData?: EventData) => void;
     };
   }
 }
@@ -19,10 +22,7 @@ declare global {
  * @param eventName - The name of the event to track
  * @param eventData - Optional data to associate with the event
  */
-export function trackEvent(
-  eventName: string,
-  eventData?: Record<string, any>
-) {
+export function trackEvent(eventName: string, eventData?: EventData) {
   if (typeof window !== "undefined" && window.umami) {
     try {
       window.umami.track(eventName, eventData);
