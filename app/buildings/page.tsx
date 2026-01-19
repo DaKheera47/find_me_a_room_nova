@@ -30,6 +30,7 @@ import {
 import { PageHeader } from "@/components/PageHeader";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { ErrorAlert } from "@/components/ErrorAlert";
+import { trackBuildingSearch, trackFreeRoomsResult } from "@/lib/umami";
 
 function FindFreeRoomContent() {
   const router = useRouter();
@@ -66,6 +67,13 @@ function FindFreeRoomContent() {
 
         if (requestId === requestIdRef.current) {
           setData(result);
+          // Track successful search result
+          trackFreeRoomsResult(
+            result.buildingCode,
+            result.roomsAvailableOverMinDuration,
+            result.totalRoomsChecked,
+            parseInt(dur, 10)
+          );
         }
       } catch (err) {
         if (requestId === requestIdRef.current) {
@@ -113,6 +121,7 @@ function FindFreeRoomContent() {
   };
 
   const handleBuildingSelect = (value: string) => {
+    trackBuildingSearch(value, parseInt(duration, 10), "building-page");
     setSelectedBuilding(value);
     updateUrl(value, duration);
   };
