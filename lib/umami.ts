@@ -90,6 +90,9 @@ export function trackFreeRoomsResult(
     availableRooms,
     totalRooms,
     duration,
-    availabilityRate: totalRooms > 0 ? (availableRooms / totalRooms) * 100 : 0,
+    availabilityRate:
+      totalRooms > 0
+        ? Math.round((availableRooms / totalRooms) * 10000) / 100
+        : 0,
   });
 }

@@ -95,7 +95,9 @@ To verify tracking is working in development:
 3. Or add a temporary console log in `lib/umami.ts`:
 
 ```typescript
-export function trackEvent(eventName: string, eventData?: Record<string, any>) {
+type EventData = Record<string, string | number | boolean>;
+
+export function trackEvent(eventName: string, eventData?: EventData) {
   console.log('Tracking event:', eventName, eventData); // Add this line
   if (typeof window !== "undefined" && window.umami) {
     // ... rest of the code
